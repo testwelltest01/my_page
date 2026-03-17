@@ -4,12 +4,13 @@ import {
   View,
   TextInput,
   ScrollView,
-  KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
 import { useState } from "react";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 const InputExampleScreen = () => {
   // 입력값을 관리할 상태 선언
   const [id, setId] = useState("");
@@ -23,10 +24,7 @@ const InputExampleScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       {/* 바깥 누르면 키보드 내려가도록 */}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
+      <KeyboardAwareScrollView style={styles.container}>
         {/*  */}
         <ScrollView
           style={styles.container}
@@ -166,7 +164,7 @@ const InputExampleScreen = () => {
             </Text>
           </View>
         </ScrollView>
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
     </TouchableWithoutFeedback>
   );
 };
