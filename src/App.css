@@ -1,48 +1,286 @@
-@reference "tailwindcss";
+@import "tailwindcss";
+
+@theme {
+  --color-mac-blue: #007aff;
+  --color-mac-blue-hover: #0062cc;
+  --color-mac-red: #ff3b30;
+  --color-mac-green: #34c759;
+  --color-mac-yellow: #ffcc00;
+
+  --color-mac-surface: var(--mac-surface);
+  --color-mac-surface-opaque: var(--mac-surface-opaque);
+  --color-mac-bg: var(--mac-bg);
+  --color-mac-border: var(--mac-border);
+  --color-mac-text: var(--mac-text);
+  --color-mac-text-secondary: var(--mac-text-secondary);
+
+  --animate-mac-fade-in: mac-fade-in 0.3s ease-out;
+  --animate-mac-slide-up: mac-slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @keyframes mac-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes mac-slide-up {
+    from {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
 
 @layer base {
   :root {
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    font-weight: 400;
+    --mac-blue: #007aff;
+    --mac-surface: rgba(255, 255, 255, 0.75);
+    --mac-surface-opaque: #ffffff;
+    --mac-bg: #f5f5f7;
+    --mac-border: rgba(0, 0, 0, 0.1);
+    --mac-text: #1d1d1f;
+    --mac-text-secondary: #86868b;
+    --mac-vibrancy: saturate(180%) blur(20px);
 
-    color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
-
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    background-color: var(--mac-bg);
+    color: var(--mac-text);
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    transition:
+      background-color 0.4s ease,
+      color 0.4s ease;
   }
 
-  a {
-    @apply font-medium text-blue-200 no-underline hover:text-[#535bf2];
+  .dark {
+    --mac-surface: rgba(45, 45, 45, 0.8);
+    --mac-surface-opaque: #1e1e1e;
+    --mac-bg: #0a0a0a;
+    --mac-border: rgba(255, 255, 255, 0.15);
+    --mac-text: #f5f5f7;
+    --mac-text-secondary: #a1a1a6;
+    --mac-vibrancy: saturate(200%) blur(25px);
+  }
+}
+
+@layer components {
+  /* Layout & Windows */
+  .mac-window {
+    position: relative;
+    border-radius: 14px;
+    border: 1px solid var(--mac-border);
+    background-color: var(--mac-surface);
+    backdrop-filter: var(--mac-vibrancy);
+    -webkit-backdrop-filter: var(--mac-vibrancy);
+    box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    transition: background-color 0.4s ease;
   }
 
-  body {
-    @apply m-0 min-w-[320px] min-h-screen;
+  .mac-title-bar {
+    display: flex;
+    align-items: center;
+    height: 52px;
+    padding: 0 20px;
+    user-select: none;
   }
 
-  #root {
-    @apply flex flex-col;
+  .mac-traffic-lights {
+    display: flex;
+    gap: 8px;
   }
 
-  h1 {
-    @apply text-[3.2em] leading-[1.1];
+  .mac-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
   }
 
-  button {
-    @apply cursor-pointer rounded-lg border border-transparent bg-[#1a1a1a] px-[1.2em] py-[0.6em] text-[1em] font-medium transition-[border-color] duration-300;
-    font-family: inherit;
+  .mac-dot-close {
+    background-color: #ff3b30;
   }
 
-  button:hover {
-    @apply border-[#646cff];
+  .mac-dot-min {
+    background-color: #ffcc00;
   }
 
-  button:focus,
-  button:focus-visible {
-    @apply outline-none ring-4 ring-[#646cff]/50;
+  .mac-dot-max {
+    background-color: #34c759;
+  }
+
+  /* Typography */
+  .mac-h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--mac-text);
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
+
+  .mac-h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--mac-text);
+    margin: 0;
+  }
+
+  .mac-body {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--mac-text);
+  }
+
+  .mac-caption {
+    font-size: 13px;
+    color: var(--mac-text-secondary);
+  }
+
+
+  /* Cards */
+  .mac-card {
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid var(--mac-border);
+    background-color: var(--mac-surface);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.4s ease;
+  }
+
+  /* Buttons - Standard CSS to avoid @apply conflicts */
+  .mac-button-primary,
+  .mac-button-secondary,
+  .mac-button-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    outline: none;
+    text-decoration: none;
+  }
+
+  .mac-button-primary {
+    background-color: #007aff;
+    color: white;
+    box-shadow: 0 1px 3px rgba(0, 122, 255, 0.3);
+  }
+
+  .mac-button-primary:hover {
+    background-color: #0062cc;
+    transform: translateY(-0.5px);
+  }
+
+  .mac-button-secondary {
+    border: 1px solid var(--mac-border);
+    color: var(--mac-text);
+    background-color: var(--mac-surface-opaque);
+  }
+
+  .mac-button-secondary:hover {
+    background-color: rgba(128, 128, 128, 0.08);
+  }
+
+  .mac-button-ghost {
+    background-color: transparent;
+    color: var(--mac-text-secondary);
+  }
+
+  .mac-button-ghost:hover {
+    background-color: rgba(128, 128, 128, 0.1);
+    color: var(--mac-text);
+  }
+
+  /* Navigation */
+  .mac-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--mac-text-secondary);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .mac-nav-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--mac-text);
+  }
+
+  .dark .mac-nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .mac-nav-item.active {
+    background-color: #007aff;
+    color: white;
+  }
+
+  /* Form Controls */
+  .mac-input,
+  .mac-search {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--mac-border);
+    background-color: rgba(255, 255, 255, 0.4);
+    font-size: 13px;
+    color: var(--mac-text);
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .dark .mac-input,
+  .dark .mac-search {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  .mac-input:focus,
+  .mac-search:focus {
+    border-color: #0062cc;
+    background-color: var(--mac-surface-opaque);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
+  }
+
+  .mac-search {
+    padding-left: 32px;
+    background-image: url("https://api.iconify.design/heroicons:magnifying-glass.svg?color=%2386868b");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    background-size: 16px;
+  }
+
+  .mac-sidebar {
+    width: 260px;
+    border-right: 1px solid var(--mac-border);
+    background-color: rgba(0, 0, 0, 0.03);
+    backdrop-filter: blur(40px);
+  }
+
+  .dark .mac-sidebar {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+
+  .mac-badge {
+    display: inline-flex;
+    padding: 2px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 600;
+    background-color: rgba(0, 122, 255, 0.12);
+    color: #007aff;
+    border: 1px solid rgba(0, 122, 255, 0.2);
   }
 }
