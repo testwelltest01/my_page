@@ -24,6 +24,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "081422e7-eb55-453c-bd99-665e142afd5a"
+      }
+    },
+    "owner": "galaxys1",
+    "plugins": [
+      "expo-asset"
+    ]
   }
 }
