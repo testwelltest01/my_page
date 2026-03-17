@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function SecondPage() {
+export default function Api() {
   // API의 url
   const [url, setUrl] = useState("https://jsonplaceholder.typicode.com/users");
 
@@ -129,15 +129,6 @@ export default function SecondPage() {
             <span className="text-lg">📚</span>
             Content Guide
           </button>
-
-          <div className="mt-auto p-4 mac-card bg-mac-surface-opaque/20 border-none">
-            <p className="mac-caption font-bold text-mac-blue uppercase tracking-tighter">
-              Endpoint
-            </p>
-            <p className="mac-caption truncate opacity-60">
-              jsonplaceholder.typicode.com
-            </p>
-          </div>
         </aside>
 
         {/* 메인 콘텐츠 영역 */}

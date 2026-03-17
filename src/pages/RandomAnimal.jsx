@@ -9,8 +9,6 @@ export default function RandomAnimal() {
   const getData = async () => {
     try {
       setLoading(true);
-      console.log(loading);
-
       const url = "http://127.0.0.1:8000/animal";
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
@@ -55,8 +53,18 @@ export default function RandomAnimal() {
     }
   };
 
+  const handleDownload = () => {
+    if (!animalPic) return;
+    const link = document.createElement("a");
+    link.href = `data:image/jpeg;base64,${animalPic}`;
+    link.download = `${animal || "random_animal"}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   useEffect(() => {
-    getData();
+    setLoading(false);
   }, []);
 
   return (
@@ -64,8 +72,14 @@ export default function RandomAnimal() {
       <header className="text-center flex flex-col gap-3">
         <div className="mac-badge mx-auto mb-2">AI Experiment</div>
         <h1 className="mac-h1 text-4xl">랜동생</h1>
-        <p className="mac-body text-[var(--mac-text-secondary)]">나노바나나가 그려주는 랜덤 동물 생성기</p>
       </header>
+      <button
+        onClick={getData}
+        disabled={loading}
+        className={`mac-button-primary px-8 py-3 text-base shadow-lg transition-all active:scale-95 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+      >
+        {loading ? "loading..." : "Generate"}
+      </button>
 
       <div className="mac-window w-full max-w-2xl flex flex-col overflow-visible">
         <div className="mac-title-bar border-b border-[var(--mac-border)] flex justify-between">
@@ -74,7 +88,9 @@ export default function RandomAnimal() {
             <div className="mac-dot mac-dot-min" />
             <div className="mac-dot mac-dot-max" />
           </div>
-          <span className="mac-caption font-medium opacity-50">Random Animal Generator</span>
+          <span className="mac-caption font-medium opacity-50">
+            나노바나나가 그려주는 랜덤 동물 생성기
+          </span>
           <div className="w-12" /> {/* Spacer for balance */}
         </div>
 
@@ -88,23 +104,29 @@ export default function RandomAnimal() {
                 </div>
               ) : (
                 <div className="text-center">
-                  <span className="mac-h2 text-3xl block mb-2">{animal || "어떤 동물이 나올까요?"}</span>
-                  <p className="mac-caption italic opacity-70">"{animal ? '멋진 동물이네요!' : '준비가 완료되었습니다.'}"</p>
+                  <span className="mac-h2 text-3xl block mb-2 whitespace-pre-line">
+                    {animal || "랜덤 동물 생성기"}
+                  </span>
                 </div>
               )}
             </div>
-            
-            <button 
-              onClick={getPrompt} 
-              disabled={loading}
-              className={`mac-button-primary px-8 py-3 text-base shadow-lg transition-all active:scale-95 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              {loading ? "작업 중..." : "AI 묘사 프롬프트 생성!"}
-            </button>
+
+            {animal && (
+              <button
+                onClick={getPrompt}
+                disabled={loading}
+                className={`mac-button-primary px-8 py-3 text-base shadow-lg transition-all active:scale-95 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+              >
+                {loading ? "loading..." : "Get Prompt"}
+              </button>
+            )}
           </div>
 
           {prompt && (
-            <div className="mac-slide-up flex flex-col gap-6" style={{ animation: 'mac-slide-up 0.5s ease-out' }}>
+            <div
+              className="mac-slide-up flex flex-col gap-6"
+              style={{ animation: "mac-slide-up 0.5s ease-out" }}
+            >
               <div className="mac-card bg-[var(--mac-surface-opaque)] shadow-xl relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-1 h-full bg-mac-blue" />
                 <div className="flex items-center gap-2 mb-3">
@@ -114,23 +136,32 @@ export default function RandomAnimal() {
                 <p className="mac-body leading-relaxed text-[15px] pl-2 border-l-2 border-gray-100 dark:border-gray-800">
                   {prompt}
                 </p>
-                
+
                 <div className="mt-8 flex flex-col items-center gap-6 pt-6 border-t border-[var(--mac-border)]">
-                  <button 
+                  <button
                     onClick={getPic}
                     disabled={loading}
-                    className="mac-button-secondary border-[var(--mac-blue)] text-mac-blue hover:bg-mac-blue/5 px-6 py-2"
+                    className={`mac-button-primary px-8 py-3 text-base shadow-lg transition-all active:scale-95 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                   >
-                    {loading ? "그리는 중..." : "매직 캔버스: 그림 생성하기"}
+                    {loading ? "loading..." : "Nano Banana"}
                   </button>
 
                   {animalPic && (
-                    <div className="w-full rounded-xl overflow-hidden shadow-2xl border border-[var(--mac-border)] animate-mac-fade-in bg-black/5">
-                      <img
-                        src={`data:image/jpeg;base64,${animalPic}`}
-                        alt="Generated Animal"
-                        className="w-full h-auto object-cover hover:scale-[1.02] transition-transform duration-500"
-                      />
+                    <div className="flex flex-col items-center gap-4 w-full">
+                      <div className="w-full rounded-xl overflow-hidden shadow-2xl border border-[var(--mac-border)] animate-mac-fade-in bg-black/5">
+                        <img
+                          src={`data:image/jpeg;base64,${animalPic}`}
+                          alt="Generated Animal"
+                          className="w-full h-auto object-cover hover:scale-[1.02] transition-transform duration-500"
+                        />
+                      </div>
+                      <button
+                        onClick={handleDownload}
+                        disabled={loading}
+                        className={`mac-button-primary px-8 py-3 text-base shadow-lg transition-all active:scale-95 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+                      >
+                        {loading ? "loading..." : "Download"}
+                      </button>
                     </div>
                   )}
                 </div>
@@ -139,7 +170,7 @@ export default function RandomAnimal() {
           )}
         </div>
       </div>
-      
+
       <footer className="mac-caption opacity-40 hover:opacity-100 transition-opacity">
         Powered by Gemini 2.0 & Imagen 4
       </footer>

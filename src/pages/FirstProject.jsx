@@ -264,16 +264,7 @@ function FirstPage() {
             </div>
           </div>
         </div>
-      </section>{" "}
-      <div className="w-full h-10" />
-      <div className="flex justify-center gap-4 mt-12 pb-10">
-        <Link to="/" className="mac-button-secondary w-64 px-8">
-          Back Home
-        </Link>
-        <Link to="/SecondPage" className="mac-button-primary w-64 px-8">
-          Next Page
-        </Link>
-      </div>
+      </section>
     </div>
   );
 }
