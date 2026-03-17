@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,9 +7,29 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TouchableOpacity,
+  Alert,
 } from "react-native";
+import LottieView from "lottie-react-native";
 
 const UpdownScreen = () => {
+  const [answer, setAnswer] = useState(Math.floor(Math.random() * 100) + 1);
+
+  const [correct, setCorrect] = useState("");
+
+  const handleCheck = () => {
+    console.log(answer);
+    if (answer === Number(userInput)) {
+      setCorrect("correct");
+      Alert.alert("정답", "정답입니다", [{ text: "예" }, { text: "아니오" }]);
+    } else if (answer > userInput) {
+      setCorrect("up");
+    } else {
+      setCorrect("down");
+    }
+  };
+
+  const [userInput, setUserInput] = useState("");
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -18,16 +39,39 @@ const UpdownScreen = () => {
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
-            keyboardType="numeric"
+            keyboardType="number-pad"
             maxLength={3}
+            value={userInput}
+            onChangeText={setUserInput}
           />
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleCheck();
+              Keyboard.dismiss();
+            }}
+          >
             <Text style={styles.buttonText}>확인</Text>
           </TouchableOpacity>
         </View>
         {/* 결과 출력 */}
         <View style={styles.resultBox}>
-          <Text>결과출력</Text>
+          <Text>{correct}</Text>
+          {correct === "correct" ? (
+            <LottieView
+              source={require("../assets/Verification Badge.json")} // require를 씁니다!
+              autoPlay // 컴포넌트가 마운트될 때 자동으로 재생할지 여부.
+              loop // 반복 재생 여부.
+              style={{ width: 200, height: 200 }} // 스타일 필수!
+            />
+          ) : (
+            <LottieView
+              source={require("../assets/error.json")} // require를 씁니다!
+              autoPlay // 컴포넌트가 마운트될 때 자동으로 재생할지 여부.
+              loop // 반복 재생 여부.
+              style={{ width: 200, height: 200 }} // 스타일 필수!
+            />
+          )}
         </View>
       </View>
     </TouchableWithoutFeedback>
