@@ -20,7 +20,7 @@ function Header() {
   }, [isDark]);
 
   return (
-    <header className="mac-window m-4 overflow-visible">
+    <header className="sticky top-4 z-50 mac-window m-4 overflow-visible backdrop-blur-md bg-mac-surface-opaque/70 border-b border-[var(--mac-border)] shadow-lg">
       <div className="mac-title-bar justify-between bg-mac-surface-opaque/50">
         <div className="flex items-center gap-6">
           <div className="mac-traffic-lights">
@@ -42,13 +42,13 @@ function Header() {
               </Link>
             </li>
             <li>
-              <Link to="/FirstPage" className="mac-nav-item">
-                First
+              <Link to="/FirstProject" className="mac-nav-item">
+                First Project
               </Link>
             </li>
             <li>
-              <Link to="/SecondPage" className="mac-nav-item">
-                Second
+              <Link to="/Api" className="mac-nav-item">
+                Api
               </Link>
             </li>
             <li>

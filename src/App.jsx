@@ -3,8 +3,8 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 
 import MainPage from "./pages/MainPage";
-import FirstPage from "./pages/FirstPage";
-import SecondPage from "./pages/SecondPage";
+import FirstPage from "./pages/FirstProject";
+import Api from "./pages/ApiPage";
 import Cat from "./pages/cat";
 import RandomAnimal from "./pages/RandomAnimal";
 import TrafficFast from "./pages/TrafficFast";
@@ -19,8 +19,8 @@ function App() {
       <main className="flex-1 flex flex-col">
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/FirstPage" element={<FirstPage />} />
-          <Route path="/SecondPage" element={<SecondPage />} />
+          <Route path="/FirstProject" element={<FirstPage />} />
+          <Route path="/Api" element={<Api />} />
           <Route path="/Cat" element={<Cat />} />
           <Route path="/RandomAnimal" element={<RandomAnimal />} />
           <Route path="/Traffic" element={<TrafficFast />} />
