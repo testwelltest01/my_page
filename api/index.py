@@ -40,15 +40,15 @@ app.add_middleware(
 # 3) API 엔드포인트(라우트) 정의
 # ──────────────────────────────────────────────
 # "/" 경로로 GET 요청이 들어오면 아래 함수를 실행
-@app.get("/home")
+@app.get("/api/home")
 def home():
     return {"message":"여기는 home입니다"}
     
-@app.get("/")
+@app.get("/api")
 def about():
     return {"그런거 없음"}
 
-@app.get("/animal")
+@app.get("/api/animal")
 def random_animal():
     import random
     style= ["디즈니", "지브리", "산수화", "픽셀 아트", "팝아트", "초현실주의", "사이버펑크", "스테인드글라스", "수묵담채화", "아르누보", "미니멀리즘", "글리치 아트", "그래피티", "Ukiyo-e", "바로크"]
@@ -59,7 +59,7 @@ def random_animal():
 
 # ──────────────────────────────────────────────
 
-@app.get("/gemini")
+@app.get("/api/gemini")
 async def ask_gemini(prompt: str):
     try:
         # SDK를 사용하여 훨씬 간단하게 호출
@@ -76,7 +76,7 @@ async def ask_gemini(prompt: str):
 from google.genai import types
 import base64
 
-@app.get("/banana")
+@app.get("/api/banana")
 async def pic_banana(banana: str):
     try:
         print(banana)
