@@ -1,4 +1,5 @@
 // MemoListScreen.js
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
   StyleSheet,
@@ -8,31 +9,60 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
 import { memoData } from "../data/memoData";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
+const renderItem = ({ item }) => (
+  <View style={[styles.itemContainer, { backgroundColor: item.color }]}>
+    <Text style={styles.emoji}>{item.title}</Text>
+    <Text style={styles.itemName}>{item.content}</Text>
+  </View>
+);
+
+const renderHeader = () => (
+  <View style={styles.header}>
+    <Text style={styles.memoCnt}>총 {memoData.length}개의 메모</Text>
+  </View>
+);
+
+const renderSeparator = () => <View style={styles.separator}></View>;
+
 const MemoListScreen = () => {
+  const [searchText, setSearchText] = useState("");
+  const [memoList, setMemoList] = useState([]);
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>📝내메모</Text>
+        <Text style={styles.headerTitle}>Memo</Text>
         <View style={styles.searchBox}>
-          <TextInput placeholder="메모 검색..." style={styles.textInput} />
+          <TextInput
+            placeholder="메모 검색..."
+            style={styles.textInput}
+            value={searchText}
+            onPress={(e) => setSearchText(e)}
+          />
           <TouchableOpacity style={styles.searchBtn}>
             <Ionicons name="search" size={20} color="#888" />
           </TouchableOpacity>
         </View>
-
-        <Text style={styles.memoCnt}>총 0개의 메모</Text>
       </View>
-      <FlatList />
+
+      <FlatList
+        contentContainerStyle={styles.listContent}
+        data={memoData}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={renderHeader}
+        renderItem={renderItem}
+        ItemSeparatorComponent={renderSeparator}
+        showsVerticalScrollIndicator={false}
+      />
       {/* 플로팅 버튼 */}
       <TouchableOpacity style={styles.fab}>
         <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -42,7 +72,20 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f5f5f5",
     flex: 1,
-    marginTop: 10,
+    marginTop: 0,
+  },
+  itemContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 18,
+    borderRadius: 20,
+    // iOS Shadow
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    // Android Elevation
+    elevation: 3,
   },
   header: {
     backgroundColor: "#fff",
@@ -53,6 +96,16 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 24,
     fontWeight: "600",
+  },
+  footerContainer: {
+    paddingVertical: 32,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  footerText: {
+    fontSize: 14,
+    color: "#a0a0a0",
+    fontWeight: "500",
   },
   searchBox: {
     flexDirection: "row",
