@@ -5,7 +5,7 @@ import Header from "./components/Header";
 import MainPage from "./pages/MainPage";
 import FirstPage from "./pages/FirstProject";
 import Api from "./pages/ApiPage";
-import Cat from "./pages/cat";
+import Cat from "./pages/Cat";
 import RandomAnimal from "./pages/RandomAnimal";
 import TrafficFast from "./pages/TrafficFast";
 import DesignSystemDemo from "./pages/DesignSystemDemo";
