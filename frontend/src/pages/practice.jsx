@@ -7,7 +7,7 @@ export default function practice() {
   const getData = async () => {
     try {
       setLoading(true);
-      const url = "http://127.0.0.1:8000/animal";
+      const url = "/api/animal";
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
       const data = await response.json();

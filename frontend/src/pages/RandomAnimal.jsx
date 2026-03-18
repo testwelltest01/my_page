@@ -9,7 +9,7 @@ export default function RandomAnimal() {
   const getData = async () => {
     try {
       setLoading(true);
-      const url = "http://127.0.0.1:8000/animal";
+      const url = "/api/animal";
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
       const data = await response.json();
@@ -24,7 +24,7 @@ export default function RandomAnimal() {
   const getPrompt = async () => {
     try {
       setLoading(true);
-      const url = `http://127.0.0.1:8000/gemini?prompt=${encodeURIComponent(animal)}`;
+      const url = `/api/gemini?prompt=${encodeURIComponent(animal)}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
       const data = await response.json();
@@ -40,7 +40,7 @@ export default function RandomAnimal() {
   const getPic = async () => {
     try {
       setLoading(true);
-      const url = `http://127.0.0.1:8000/banana?banana=${encodeURIComponent(prompt)}`;
+      const url = `/api/banana?banana=${encodeURIComponent(prompt)}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
       const data = await response.json();
