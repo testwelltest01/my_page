@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 export default function RandomAnimal() {
   const [animal, setAnimal] = useState();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [prompt, setPrompt] = useState();
   const [animalPic, setAnimalPic] = useState();
 
