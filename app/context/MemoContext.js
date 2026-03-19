@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import { createContext, useState } from "react";
 import { memoData as initialData } from "../data/memoData";
 
 // 1. 컨텍스트 생성
@@ -24,17 +24,15 @@ export const MemoProvider = ({ children }) => {
     const today = new Date().toISOString().split("T")[0];
     setMemos(
       memos.map((m) =>
-        m.id === id ? { ...m, title, content, updatedAt: today } : m
-      )
+        m.id === id ? { ...m, title, content, updatedAt: today } : m,
+      ),
     );
   };
 
   // 메모 삭제 (Soft Delete)
   const deleteMemo = (id) => {
     const today = new Date().toISOString().split("T")[0];
-    setMemos(
-      memos.map((m) => (m.id === id ? { ...m, deletedAt: today } : m))
-    );
+    setMemos(memos.map((m) => (m.id === id ? { ...m, deletedAt: today } : m)));
   };
 
   return (
