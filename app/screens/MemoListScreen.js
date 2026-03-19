@@ -1,6 +1,4 @@
-// MemoListScreen.js
-import { SafeAreaView } from "react-native-safe-area-context";
-
+import React, { useContext, useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,58 +7,102 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { memoData } from "../data/memoData";
-import { memo, useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { MemoContext } from "../context/MemoContext";
 
-const renderItem = ({ item }) => (
-  <View style={[styles.itemContainer, { backgroundColor: item.color }]}>
-    <Text style={styles.emoji}>{item.title}</Text>
-    <Text style={styles.itemName}>{item.content}</Text>
-  </View>
-);
+const renderSeparator = () => <View style={styles.separator} />;
 
-const renderHeader = () => (
-  <View style={styles.header}>
-    <Text style={styles.memoCnt}>총 {memoData.length}개의 메모</Text>
-  </View>
-);
+const MemoListScreen = ({ navigation }) => {
+  const { memos } = useContext(MemoContext); // 컨텍스트에서 실시간 메모 목록 가져오기
 
-const renderSeparator = () => <View style={styles.separator}></View>;
-
-const MemoListScreen = () => {
   const [searchText, setSearchText] = useState("");
-  const [memoList, setMemoList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const [showDeleted, setShowDeleted] = useState(false);
+
+  // 메모나 검색어가 바뀔 때마다 필터링된 리스트를 보여줍니다 (삭제된 건 제외)
+  useEffect(() => {
+    const list = memos.filter((m) => {
+      return (
+        (showDeleted || !m.deletedAt) &&
+        (m.title.toLowerCase().includes(searchText.toLowerCase()) ||
+          m.content.toLowerCase().includes(searchText.toLowerCase()))
+      );
+    });
+    setFilteredList(list);
+  }, [memos, searchText, showDeleted]);
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.itemContainer}
+      onPress={() => {
+        navigation.navigate("Detail", { id: item.id });
+      }}
+    >
+      <View style={styles.itemContent}>
+        <Text style={styles.itemTitle}>{item.title}</Text>
+        <Text style={styles.itemPreview} numberOfLines={2}>
+          {item.content}
+        </Text>
+
+        <Text style={styles.itemDate}>
+          {"작성: " + item.createdAt}
+          {item.updatedAt && " | 수정: " + item.updatedAt}
+          {item.deletedAt && " | 삭제: " + item.deletedAt}
+        </Text>
+      </View>
+      <Ionicons name="chevron-forward" size={20} color="#ccc" />
+    </TouchableOpacity>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* 고정 헤더 */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Memo</Text>
+        <View style={styles.headerTop}>
+          <Text style={styles.headerTitle}>나의 메모장</Text>
+          <Text style={styles.memoCnt}>{filteredList.length} notes</Text>
+        </View>
+
         <View style={styles.searchBox}>
+          <Ionicons
+            name="search"
+            size={18}
+            color="#999"
+            style={styles.searchIcon}
+          />
           <TextInput
-            placeholder="메모 검색..."
+            placeholder="Search notes..."
             style={styles.textInput}
             value={searchText}
-            onPress={(e) => setSearchText(e)}
+            onChangeText={(text) => setSearchText(text)}
+            returnKeyType="done"
           />
-          <TouchableOpacity style={styles.searchBtn}>
-            <Ionicons name="search" size={20} color="#888" />
-          </TouchableOpacity>
         </View>
       </View>
 
       <FlatList
         contentContainerStyle={styles.listContent}
-        data={memoData}
+        data={filteredList}
         keyExtractor={(item) => item.id}
-        ListHeaderComponent={renderHeader}
         renderItem={renderItem}
         ItemSeparatorComponent={renderSeparator}
         showsVerticalScrollIndicator={false}
       />
+
       {/* 플로팅 버튼 */}
-      <TouchableOpacity style={styles.fab}>
-        <Text style={styles.fabText}>+</Text>
+      <TouchableOpacity
+        style={[styles.fab1, showDeleted && styles.fab2on]}
+        onPress={() => setShowDeleted(!showDeleted)}
+      >
+        <Ionicons name="trash" size={30} color="#fff" />
+      </TouchableOpacity>
+      {/* 플로팅 버튼 */}
+      <TouchableOpacity
+        style={styles.fab2}
+        onPress={() => navigation.navigate("Form", { id: null })}
+      >
+        <Ionicons name="add" size={30} color="#fff" />
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -70,83 +112,113 @@ export default MemoListScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#fff",
     flex: 1,
-    marginTop: 0,
-  },
-  itemContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 18,
-    borderRadius: 20,
-    // iOS Shadow
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 12,
-    // Android Elevation
-    elevation: 3,
   },
   header: {
     backgroundColor: "#fff",
     paddingHorizontal: 20,
-    paddingVertical: 10,
-    gap: 10,
+    paddingBottom: 20,
+    paddingTop: 40,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
+  },
+  headerTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "baseline",
+    marginBottom: 15,
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: "600",
+    fontSize: 32,
+    fontWeight: "800",
+    color: "#1a1a1a",
   },
-  footerContainer: {
-    paddingVertical: 32,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  footerText: {
+  memoCnt: {
     fontSize: 14,
-    color: "#a0a0a0",
+    color: "#999",
     fontWeight: "500",
   },
   searchBox: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#eee",
-    borderRadius: 10,
-    paddingHorizontal: 10,
+    backgroundColor: "#f2f2f7",
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    height: 44,
+  },
+  searchIcon: {
+    marginRight: 8,
   },
   textInput: {
     flex: 1,
-    paddingVertical: 10,
+    fontSize: 16,
+    color: "#000",
   },
-  searchBtn: {
-    padding: 8,
+  listContent: {
+    padding: 20,
+    paddingBottom: 100,
   },
-  memoCnt: {
-    color: "#333",
+  itemContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 15,
   },
-  // 플로팅 버튼 스타일
-  fab: {
+  itemContent: {
+    flex: 1,
+  },
+  itemTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#1a1a1a",
+    marginBottom: 4,
+  },
+  itemPreview: {
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 6,
+  },
+  itemDate: {
+    fontSize: 12,
+    color: "#bbb",
+  },
+  separator: {
+    height: 1,
+    backgroundColor: "#f0f0f0",
+  },
+  fab1: {
     position: "absolute",
-    bottom: 30,
-    right: 20,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: "#4A90D9",
+    bottom: 110,
+    right: 25,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: "#000",
     justifyContent: "center",
     alignItems: "center",
-    // 그림자 (iOS)
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
-    shadowRadius: 4,
-    // 그림자 (Android)
+    shadowRadius: 10,
     elevation: 8,
   },
-  fabText: {
-    color: "#fff",
-    fontSize: 28,
-    fontWeight: "300",
-    marginTop: -2, // 시각적 중앙 보정
+  fab2: {
+    position: "absolute",
+    bottom: 40,
+    right: 25,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: "#000",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 8,
+  },
+  fab2on: {
+    backgroundColor: "#FF0000",
   },
 });

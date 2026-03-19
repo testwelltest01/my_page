@@ -1,21 +1,10 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-
-import MoodScreen from "./screens/MoodScreen";
-import InputExampleScreen from "./screens/InputExampleScreen";
-import UpdownScreen from "./screens/NumberMatch";
-import FlatlistScreen from "./screens/FlatlistScreen";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import MemoListScreen from "./screens/MemoListScreen";
-import MemoDetailScreen from "./screens/MemoDetailScreen";
-import MemoFormScreen from "./screens/MemoFormScreen";
+import MemoStackNavigator from "./navigator/MemoStackNavigator";
+import { MemoProvider } from "./context/MemoContext";
 
 export default function App() {
   return (
-    <SafeAreaProvider>
-      <MemoListScreen />
-    </SafeAreaProvider>
+    <MemoProvider>
+      <MemoStackNavigator />
+    </MemoProvider>
   );
 }
-
-const styles = StyleSheet.create({});

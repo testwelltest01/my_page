@@ -1,32 +1,54 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useContext } from "react";
+import { MemoContext } from "../context/MemoContext";
 
-const MemoDetailScreen = () => {
+const MemoDetailScreen = ({ route, navigation }) => {
+  const { id } = route.params;
+  const { memos, deleteMemo } = useContext(MemoContext); // 컨텍스트 가동!
+
+  // 실시간으로 변하는 컨텍스트 내의 메모를 찾습니다.
+  const memo = memos.find((m) => m.id === id);
+
+  const handleDelete = () => {
+    deleteMemo(id); // 컨텍스트의 삭제 함수 호출
+    navigation.goBack();
+  };
+
+  const handleUpdate = () => {
+    navigation.navigate("Form", { id: id });
+  };
+
+  if (!memo) return null;
+
   return (
-    <View style={styles.container} edges={["bottom"]}>
-      {/* 제목 영역 */}
-      <View style={styles.titleSection}>
-        <Text style={styles.title}>제목</Text>
-        <Text style={styles.date}>📅 2026-01-01</Text>
-      </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container} edges={["bottom"]}>
+        {/* 제목 영역 */}
+        <View style={styles.titleSection}>
+          <Text style={styles.title}>{memo.title}</Text>
+          <Text style={styles.date}>📅 {memo.createdAt}</Text>
+        </View>
 
-      {/* 구분선 */}
-      <View style={styles.divider} />
+        {/* 구분선 */}
+        <View style={styles.divider} />
 
-      {/* 내용 영역 */}
-      <View style={styles.contentSection}>
-        <Text style={styles.content}>내용내용내용내용내용내용</Text>
-      </View>
+        {/* 내용 영역 */}
+        <View style={styles.contentSection}>
+          <Text style={styles.content}>{memo.content}</Text>
+        </View>
 
-      {/* 하단 버튼 영역 */}
-      <View style={styles.buttonArea}>
-        <TouchableOpacity style={styles.editButton}>
-          <Text style={styles.editButtonText}>✏️ 수정</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.deleteButton}>
-          <Text style={styles.deleteButtonText}>🗑️ 삭제</Text>
-        </TouchableOpacity>
+        {/* 하단 버튼 영역 */}
+        <View style={styles.buttonArea}>
+          <TouchableOpacity style={styles.editButton} onPress={handleUpdate}>
+            <Text style={styles.editButtonText}>✏️ 수정</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
+            <Text style={styles.deleteButtonText}>🗑️ 삭제</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -44,6 +66,7 @@ const styles = StyleSheet.create({
   titleSection: {
     padding: 20,
     paddingBottom: 15,
+    paddingTop: 40,
   },
   title: {
     fontSize: 24,
