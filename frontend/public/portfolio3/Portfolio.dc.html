@@ -1,353 +1,666 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Second Project - Baseball Team System</title>
+  <script src="./support.js"></script>
 </head>
+
 <body>
-<x-dc>
-<helmet>
-  <link rel="stylesheet" href="_ds/terra-design-system-e80b04b0-2944-4a0e-adbf-516d66d132de/tokens/fonts.css">
-  <link rel="stylesheet" href="_ds/terra-design-system-e80b04b0-2944-4a0e-adbf-516d66d132de/tokens/colors.css">
-  <link rel="stylesheet" href="_ds/terra-design-system-e80b04b0-2944-4a0e-adbf-516d66d132de/tokens/typography.css">
-  <link rel="stylesheet" href="_ds/terra-design-system-e80b04b0-2944-4a0e-adbf-516d66d132de/tokens/spacing.css">
-  <link rel="stylesheet" href="_ds/terra-design-system-e80b04b0-2944-4a0e-adbf-516d66d132de/tokens/elevation.css">
-  <link rel="stylesheet" href="_ds/terra-design-system-e80b04b0-2944-4a0e-adbf-516d66d132de/styles.css">
-  <script src="_ds/terra-design-system-e80b04b0-2944-4a0e-adbf-516d66d132de/_ds_bundle.js"></script>
-  <style>
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { margin: 0; }
-    a { color: inherit; text-decoration: none; }
-    @keyframes vidspin { to { transform: rotate(360deg); } }
-  </style>
-  <script>
-    (function () {
-      function hide(e) { var v = e.target; if (v && v.tagName === 'VIDEO') { var s = v.parentElement && v.parentElement.querySelector('[data-vid-spinner]'); if (s) s.style.display = 'none'; } }
-      function show(e) { var v = e.target; if (v && v.tagName === 'VIDEO') { var s = v.parentElement && v.parentElement.querySelector('[data-vid-spinner]'); if (s) s.style.display = 'flex'; } }
-      ['canplay', 'playing', 'loadeddata'].forEach(function (ev) { document.addEventListener(ev, hide, true); });
-      document.addEventListener('waiting', show, true);
-      function kick() {
-        var vids = document.querySelectorAll('video');
-        vids.forEach(function (v) {
-          v.muted = true;
-          v.defaultMuted = true;
-          v.loop = true;
-          var p = v.play();
-          if (p && p.catch) p.catch(function () {});
-        });
-      }
-      if (document.readyState === 'complete' || document.readyState === 'interactive') { setTimeout(kick, 300); }
-      window.addEventListener('load', function () { setTimeout(kick, 100); });
-      document.addEventListener('canplay', function (e) { if (e.target && e.target.tagName === 'VIDEO') { e.target.muted = true; var p = e.target.play(); if (p && p.catch) p.catch(function () {}); } }, true);
-      document.addEventListener('ended', function (e) { var v = e.target; if (v && v.tagName === 'VIDEO') { v.currentTime = 0; v.muted = true; var p = v.play(); if (p && p.catch) p.catch(function () {}); } }, true);
-    })();
-  </script>
-</helmet>
-<div style="background: var(--surface-bg); color: var(--text-body); font-family: var(--font-body); line-height: var(--leading-body); min-height: 100vh;">
+  <x-dc>
+    <helmet>
+      <title>BTS (Baseball Team System) — 최현석 · 풀스택 개발자 포트폴리오</title>
+      <meta name="description" content="프로젝트 리더로서 백로그 조율부터 코드 병합, 풀스택 개발을 총괄하여 야구팀 운영 앱 BTS를 빌드한 최현석의 포트폴리오입니다.">
+      <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+      <link rel="apple-touch-icon" href="assets/logo.svg">
+      <meta property="og:image" content="assets/logo.svg">
+      <meta name="twitter:image" content="assets/logo.svg">
+      <link rel="stylesheet" href="_ds/terra-design-system-e80b04b0-2944-4a0e-adbf-516d66d132de/tokens/fonts.css">
+      <link rel="stylesheet" href="_ds/terra-design-system-e80b04b0-2944-4a0e-adbf-516d66d132de/tokens/colors.css">
+      <link rel="stylesheet" href="_ds/terra-design-system-e80b04b0-2944-4a0e-adbf-516d66d132de/tokens/typography.css">
+      <link rel="stylesheet" href="_ds/terra-design-system-e80b04b0-2944-4a0e-adbf-516d66d132de/tokens/spacing.css">
+      <link rel="stylesheet" href="_ds/terra-design-system-e80b04b0-2944-4a0e-adbf-516d66d132de/tokens/elevation.css">
+      <link rel="stylesheet" href="_ds/terra-design-system-e80b04b0-2944-4a0e-adbf-516d66d132de/styles.css">
+      <script src="_ds/terra-design-system-e80b04b0-2944-4a0e-adbf-516d66d132de/_ds_bundle.js"></script>
+      <style>
+        * {
+          box-sizing: border-box;
+        }
 
-  <div style="height: 4px; background: linear-gradient(90deg, var(--green-600), var(--amber-700));"></div>
+        html {
+          scroll-behavior: smooth;
+        }
 
-  <header style="position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--surface-bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--outline);">
-    <div style="max-width: 1080px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
-      <div style="display: flex; align-items: baseline; gap: 10px;">
-        <span style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); letter-spacing: var(--tracking-tight);">최현석</span>
-        <span style="font-size: var(--text-xs); color: var(--text-muted); letter-spacing: var(--tracking-wide);">AI 서비스 개발자</span>
-      </div>
-      <nav style="display: flex; align-items: center; gap: 22px; font-size: var(--text-sm); color: var(--text-muted);">
-        <a href="#project" style="font-weight: 600;">프로젝트</a>
-        <a href="#work" style="font-weight: 600;">한 일</a>
-        <a href="#demo" style="font-weight: 600;">데모</a>
-        <a href="#strength" style="font-weight: 600;">강점</a>
-        <a href="#contact" style="display: inline-flex; align-items: center; padding: 8px 16px; border-radius: var(--radius-pill); background: var(--color-primary); color: #fff; font-weight: 600;">연락하기</a>
-      </nav>
-    </div>
-  </header>
+        body {
+          margin: 0;
+          font-family: var(--font-body);
+          word-break: keep-all;
+        }
 
-  <!-- HERO -->
-  <section style="max-width: 1080px; margin: 0 auto; padding: 72px 24px 56px;">
-    <div style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 48px; align-items: center;">
-      <div>
-        <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: var(--radius-pill); background: var(--green-100); color: var(--green-700); font-size: var(--text-xs); font-weight: 700; letter-spacing: var(--tracking-label); text-transform: uppercase; margin-bottom: 22px;">개발자 포트폴리오</div>
-        <h1 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-4xl); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--text-strong); margin: 0 0 20px;">끊어진 연결 지점을<br>찾아 잇는 개발자</h1>
-        <p style="font-size: var(--text-md); color: var(--text-body); margin: 0 0 28px; max-width: 30em;">데이터 · API · 화면 · 팀. 흩어진 조각을 하나의 흐름으로 연결하고 안정화하는 일을 합니다. 풀스택으로 기능을 끝까지 만들고, 여러 사람의 작업을 하나의 제품으로 통합한 경험이 있습니다.</p>
-        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-          <a href="#work" style="display: inline-flex; align-items: center; padding: 13px 24px; border-radius: var(--radius-md); background: var(--color-primary); color: #fff; font-weight: 700; font-size: var(--text-base); box-shadow: var(--shadow-sm);">한 일 살펴보기</a>
-          <a href="https://github.com/intel-app-project/main/tree/codex/hyunseok" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; border-radius: var(--radius-md); background: var(--surface-card); border: 1px solid var(--green-300); color: var(--green-700); font-weight: 700; font-size: var(--text-base);">GitHub 저장소 →</a>
-        </div>
-      </div>
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
 
-      <aside style="background: var(--surface-card); border: 1px solid var(--outline); border-radius: 18px; padding: 28px; box-shadow: var(--shadow-md);">
-        <div style="font-size: var(--text-xs); font-weight: 700; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--text-subtle); margin-bottom: 18px;">한눈에</div>
-        <div style="display: flex; flex-direction: column; gap: 16px;">
-          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--outline);">
-            <span style="font-size: var(--text-sm); color: var(--text-muted);">역할</span>
-            <span style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); text-align: right;">풀스택 · 통합 담당</span>
-          </div>
-          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--outline);">
-            <span style="font-size: var(--text-sm); color: var(--text-muted);">기여</span>
-            <span style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); text-align: right;">71 커밋 · 25 머지</span>
-          </div>
-          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--outline);">
-            <span style="font-size: var(--text-sm); color: var(--text-muted);">주력</span>
-            <span style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); text-align: right;">RN · FastAPI · Supabase</span>
-          </div>
-          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
-            <span style="font-size: var(--text-sm); color: var(--text-muted);">AI</span>
-            <span style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); text-align: right;">Gemini · Imagen 연동</span>
-          </div>
-        </div>
-      </aside>
-    </div>
-  </section>
+        @keyframes vidspin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
 
-  <!-- PROJECT -->
-  <section id="project" style="background: var(--surface-sunk); border-top: 1px solid var(--outline); border-bottom: 1px solid var(--outline); padding: 72px 0;">
-    <div style="max-width: 1080px; margin: 0 auto; padding: 0 24px;">
-      <div style="display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-xs); font-weight: 700; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--amber-700); margin-bottom: 14px;">프로젝트</div>
-      <div style="display: grid; grid-template-columns: 1fr 0.9fr; gap: 48px; align-items: center;">
-        <div>
-          <h2 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-2xl); line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); color: var(--text-strong); margin: 0 0 18px;">BTS — 사회인 야구팀 운영 앱</h2>
-          <p style="font-size: var(--text-base); color: var(--text-body); margin: 0 0 18px;">경기 일정 공유, 참석 확인, 라인업 구성, 선수 기록이 여러 채널에 흩어져 있던 운영 흐름을 하나의 모바일 앱으로 모았습니다. 선수 · 감독 · 기록원 <strong>세 역할</strong>이 각자 필요한 화면만 보도록 설계했습니다.</p>
-          <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0 0 24px;">3인 팀 · 약 2주 집중 개발 · 제 역할은 <strong style="color: var(--text-body);">백엔드 연동 · 인증/권한 · 공통 구조 · 팀 통합</strong></p>
-          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-            <span style="padding: 6px 14px; border-radius: var(--radius-pill); background: var(--green-100); color: var(--green-700); font-size: var(--text-sm); font-weight: 600;">React Native</span>
-            <span style="padding: 6px 14px; border-radius: var(--radius-pill); background: var(--green-100); color: var(--green-700); font-size: var(--text-sm); font-weight: 600;">React Navigation</span>
-            <span style="padding: 6px 14px; border-radius: var(--radius-pill); background: var(--green-100); color: var(--green-700); font-size: var(--text-sm); font-weight: 600;">FastAPI</span>
-            <span style="padding: 6px 14px; border-radius: var(--radius-pill); background: var(--green-100); color: var(--green-700); font-size: var(--text-sm); font-weight: 600;">Supabase</span>
-            <span style="padding: 6px 14px; border-radius: var(--radius-pill); background: var(--amber-100); color: var(--amber-700); font-size: var(--text-sm); font-weight: 600;">Google GenAI</span>
-            <span style="padding: 6px 14px; border-radius: var(--radius-pill); background: var(--amber-100); color: var(--amber-700); font-size: var(--text-sm); font-weight: 600;">Imagen</span>
-          </div>
-        </div>
-        <figure style="margin: 0; background: var(--surface-card); border: 1px solid var(--outline); border-radius: 16px; padding: 18px; box-shadow: var(--shadow-md);">
-          <img src="assets/wf-0.png" alt="로그인 후 역할별 화면 분기 와이어프레임" style="width: 100%; height: auto; display: block; border-radius: 10px; background: #fff;">
-          <figcaption style="font-size: var(--text-xs); color: var(--text-muted); margin-top: 12px; text-align: center;">로그인 → 역할(선수·감독·기록원)별 진입 분기 · 기획 와이어프레임</figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
+        @media (max-width: 720px) {
+          body {
+            overflow-x: hidden;
+          }
 
-  <!-- WORK -->
-  <section id="work" style="max-width: 1080px; margin: 0 auto; padding: 72px 24px 24px;">
-    <div style="display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-xs); font-weight: 700; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--green-700); margin-bottom: 14px;">내가 한 일</div>
-    <h2 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-2xl); line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); color: var(--text-strong); margin: 0 0 12px;">문제 → 한 일 → 결과</h2>
-    <p style="font-size: var(--text-base); color: var(--text-muted); margin: 0 0 36px; max-width: 40em;">화면 하나를 맡기보다, 데이터·API·화면·팀 사이의 연결을 계속 해결한 기여입니다. 모든 항목은 Git 기록으로 확인됩니다.</p>
+          header > div {
+            align-items: flex-start !important;
+            flex-direction: column !important;
+            gap: 14px !important;
+            padding: 14px 20px !important;
+          }
 
-    <!-- Feature card: Git 통합 -->
-    <article style="background: var(--surface-inverse); color: var(--text-on-color); border-radius: 18px; padding: 36px; box-shadow: var(--shadow-md); margin-bottom: 24px;">
-      <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 36px; align-items: center;">
-        <div>
-          <span style="display: inline-block; padding: 5px 12px; border-radius: var(--radius-pill); background: color-mix(in srgb, var(--green-400) 30%, transparent); color: var(--green-100); font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.04em; margin-bottom: 16px;">협업 · 버전관리</span>
-          <h3 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-xl); line-height: var(--leading-snug); color: #fff; margin: 0 0 14px;">여러 명의 작업을 하나의 앱으로 통합</h3>
-          <p style="font-size: var(--text-base); color: var(--green-100); margin: 0 0 18px;">후반에 5개 이상의 feature 브랜치가 동시에 병합되며 충돌·깨진 화면·중복 파일이 생겼습니다. 단순 merge에 그치지 않고 <strong style="color:#fff;">syntax error 수정, 잘못된 UI 변경 revert, 공통 navigation 연결, 중복 화면 정리</strong>로 팀 기능이 하나의 흐름으로 동작하도록 만들었습니다.</p>
-          <p style="font-size: var(--text-sm); color: #fff; font-weight: 600; margin: 0;">→ 각자 만든 화면이 하나의 제품으로 연결되고, 제출 가능한 안정 상태로 마감</p>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 14px;">
-          <div style="display: flex; align-items: baseline; gap: 12px;">
-            <span style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-3xl); color: #fff; line-height: 1;">25</span>
-            <span style="font-size: var(--text-sm); color: var(--green-200);">merge 커밋으로<br>dev 브랜치 통합 주도</span>
-          </div>
-          <div style="height: 1px; background: color-mix(in srgb, var(--green-300) 30%, transparent);"></div>
-          <div style="display: flex; flex-direction: column; gap: 9px;">
-            <div style="display: flex; align-items: baseline; gap: 10px;">
-              <code style="flex: none; color: var(--green-300); font-size: var(--text-xs); font-family: ui-monospace, monospace;">903f517</code>
-              <span style="font-size: var(--text-sm); color: var(--green-100);">화면 전환을 MainTabNavigator로 통합</span>
-            </div>
-            <div style="display: flex; align-items: baseline; gap: 10px;">
-              <code style="flex: none; color: var(--green-300); font-size: var(--text-xs); font-family: ui-monospace, monospace;">9a3e9b8</code>
-              <span style="font-size: var(--text-sm); color: var(--green-100);">감독·선수 footer를 공통 컴포넌트로 통합</span>
-            </div>
-            <div style="display: flex; align-items: baseline; gap: 10px;">
-              <code style="flex: none; color: var(--green-300); font-size: var(--text-xs); font-family: ui-monospace, monospace;">8966556</code>
-              <span style="font-size: var(--text-sm); color: var(--green-100);">병합 후 syntax error·버튼 복구</span>
-            </div>
-            <div style="display: flex; align-items: baseline; gap: 10px;">
-              <code style="flex: none; color: var(--green-300); font-size: var(--text-xs); font-family: ui-monospace, monospace;">35e7c67</code>
-              <span style="font-size: var(--text-sm); color: var(--green-100);">구조와 안 맞는 UI 변경 revert</span>
+          header nav {
+            flex-wrap: wrap !important;
+            gap: 14px !important;
+            width: 100% !important;
+            font-size: 13px !important;
+          }
+
+          section {
+            padding-left: 20px !important;
+            padding-right: 20px !important;
+          }
+
+          section > div[style*="display: grid"],
+          div[style*="grid-template-columns"] {
+            grid-template-columns: 1fr !important;
+          }
+
+          h1 {
+            font-size: 2.5rem !important;
+            line-height: 1.28 !important;
+          }
+
+          h2 {
+            font-size: 2rem !important;
+            line-height: 1.36 !important;
+          }
+
+          aside,
+          figure,
+          img,
+          video {
+            max-width: 100% !important;
+          }
+        }
+
+        @media (max-width: 420px) {
+          h1 {
+            font-size: 2.25rem !important;
+          }
+
+          header nav {
+            column-gap: 12px !important;
+            row-gap: 8px !important;
+          }
+        }
+      </style>
+      <script>
+        (function () {
+          function hide(e) { var v = e.target; if (v && v.tagName === 'VIDEO') { var s = v.parentElement && v.parentElement.querySelector('[data-vid-spinner]'); if (s) s.style.display = 'none'; } }
+          function show(e) { var v = e.target; if (v && v.tagName === 'VIDEO') { var s = v.parentElement && v.parentElement.querySelector('[data-vid-spinner]'); if (s) s.style.display = 'flex'; } }
+          ['canplay', 'playing', 'loadeddata'].forEach(function (ev) { document.addEventListener(ev, hide, true); });
+          document.addEventListener('waiting', show, true);
+          function kick() {
+            var vids = document.querySelectorAll('video');
+            vids.forEach(function (v) {
+              v.muted = true;
+              v.defaultMuted = true;
+              v.loop = true;
+              var p = v.play();
+              if (p && p.catch) p.catch(function () { });
+            });
+          }
+          if (document.readyState === 'complete' || document.readyState === 'interactive') { setTimeout(kick, 300); }
+          window.addEventListener('load', function () { setTimeout(kick, 100); });
+          document.addEventListener('canplay', function (e) { if (e.target && e.target.tagName === 'VIDEO') { e.target.muted = true; var p = e.target.play(); if (p && p.catch) p.catch(function () { }); } }, true);
+          document.addEventListener('ended', function (e) { var v = e.target; if (v && v.tagName === 'VIDEO') { v.currentTime = 0; v.muted = true; var p = v.play(); if (p && p.catch) p.catch(function () { }); } }, true);
+        })();
+      </script>
+    </helmet>
+    <div
+      style="background: var(--surface-bg); color: var(--text-body); font-family: var(--font-body); line-height: var(--leading-body); min-height: 100vh;">
+
+      <div style="height: 4px; background: linear-gradient(90deg, var(--green-600), var(--amber-700));"></div>
+
+      <header
+        style="position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--surface-bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--outline);">
+        <div
+          style="max-width: 1080px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span
+              style="width: 32px; height: 32px; border-radius: 8px; background: var(--green-100); display: flex; align-items: center; justify-content: center; flex: 0 0 auto;">
+              <img src="assets/logo.svg" alt="야구 로고" style="width: 22px; height: 22px; display: block;">
+            </span>
+            <div style="display: flex; align-items: baseline; gap: 8px;">
+              <span
+                style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); letter-spacing: var(--tracking-tight);">최현석</span>
+              <span style="font-size: var(--text-xs); color: var(--text-muted); letter-spacing: var(--tracking-wide);">AI
+                서비스 개발자</span>
             </div>
           </div>
+          <nav
+            style="display: flex; align-items: center; gap: 22px; font-size: var(--text-sm); color: var(--text-muted);">
+            <a href="#project" style="font-weight: 600;">프로젝트</a>
+            <a href="#work" style="font-weight: 600;">한 일</a>
+            <a href="#demo" style="font-weight: 600;">데모</a>
+            <a href="#strength" style="font-weight: 600;">강점</a>
+            <a href="#contact"
+              style="display: inline-flex; align-items: center; padding: 8px 16px; border-radius: var(--radius-pill); background: var(--color-primary); color: #fff; font-weight: 600;">연락하기</a>
+          </nav>
         </div>
-      </div>
-    </article>
+      </header>
 
-    <!-- Card grid -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-
-      <article style="background: var(--surface-card); border: 1px solid var(--outline); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); transition: transform 160ms ease, box-shadow 160ms ease;" style-hover="transform: translateY(-2px); box-shadow: var(--shadow-md);">
-        <span style="display: inline-block; padding: 5px 12px; border-radius: var(--radius-pill); background: var(--green-100); color: var(--green-700); font-size: var(--text-xs); font-weight: 700; margin-bottom: 16px;">프론트엔드 · 구조</span>
-        <h3 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); line-height: var(--leading-snug); color: var(--text-strong); margin: 0 0 12px;">역할 기반 내비게이션 재설계</h3>
-        <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0 0 14px;">화면이 늘며 <code style="font-family:ui-monospace,monospace;">useState</code> 기반 분기가 복잡해지고 footer가 역할별로 중복됐습니다.</p>
-        <ul style="margin: 0 0 16px; padding-left: 18px; font-size: var(--text-sm); color: var(--text-body); display: flex; flex-direction: column; gap: 6px;">
-          <li>React Navigation 기반 <code style="font-family:ui-monospace,monospace;">MainTabNavigator</code> 도입</li>
-          <li>Supabase <code style="font-family:ui-monospace,monospace;">Primary_Position</code>으로 역할별 탭 분기</li>
-          <li>중복 footer를 <code style="font-family:ui-monospace,monospace;">CommonFooter</code>로 통합</li>
-        </ul>
-        <p style="font-size: var(--text-sm); color: var(--green-700); font-weight: 600; margin: 0;">→ 화면 추가·유지보수 비용을 낮춘 구조 확보</p>
-      </article>
-
-      <article style="background: var(--surface-card); border: 1px solid var(--outline); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); transition: transform 160ms ease, box-shadow 160ms ease;" style-hover="transform: translateY(-2px); box-shadow: var(--shadow-md);">
-        <span style="display: inline-block; padding: 5px 12px; border-radius: var(--radius-pill); background: var(--green-100); color: var(--green-700); font-size: var(--text-xs); font-weight: 700; margin-bottom: 16px;">백엔드 · 데이터</span>
-        <h3 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); line-height: var(--leading-snug); color: var(--text-strong); margin: 0 0 12px;">FastAPI–Supabase 연동 & CSV 파이프라인</h3>
-        <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0 0 14px;">앱이 팀·선수·경기 데이터를 안정적으로 쓰려면 API 계층이, 기록 입력엔 대량 반영 흐름이 필요했습니다.</p>
-        <ul style="margin: 0 0 16px; padding-left: 18px; font-size: var(--text-sm); color: var(--text-body); display: flex; flex-direction: column; gap: 6px;">
-          <li>FastAPI–Supabase 조회 API 계층 구축</li>
-          <li><code style="font-family:ui-monospace,monospace;">pandas</code> 기반 CSV 업로드 → DB 반영</li>
-          <li>기록원 업로드 화면과 endpoint 정합</li>
-        </ul>
-        <p style="font-size: var(--text-sm); color: var(--green-700); font-weight: 600; margin: 0;">→ 파일 입력 → 서버 처리 → DB 저장 파이프라인 완성</p>
-      </article>
-
-      <article style="background: var(--surface-card); border: 1px solid var(--outline); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); transition: transform 160ms ease, box-shadow 160ms ease;" style-hover="transform: translateY(-2px); box-shadow: var(--shadow-md);">
-        <span style="display: inline-block; padding: 5px 12px; border-radius: var(--radius-pill); background: var(--amber-100); color: var(--amber-700); font-size: var(--text-xs); font-weight: 700; margin-bottom: 16px;">풀스택 · AI</span>
-        <h3 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); line-height: var(--leading-snug); color: var(--text-strong); margin: 0 0 12px;">선수 상세 통계 + AI PR 카드</h3>
-        <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0 0 14px;">단순 프로필이 아니라 기록 분석부터 AI 이미지 생성까지 한 화면에 모여 상태·오류 처리 난도가 높았습니다.</p>
-        <ul style="margin: 0 0 16px; padding-left: 18px; font-size: var(--text-sm); color: var(--text-body); display: flex; flex-direction: column; gap: 6px;">
-          <li>경기 데이터로 타율·출루율·ERA·WHIP 등 계산</li>
-          <li>Gemini로 프롬프트 → Imagen 이미지 생성 연동</li>
-          <li>생성 이미지 미리보기·저장, 실패 시 fallback</li>
-        </ul>
-        <p style="font-size: var(--text-sm); color: var(--amber-700); font-weight: 600; margin: 0;">→ 기록 분석 → 리뷰 → 카드 생성으로 이어지는 차별화 기능</p>
-      </article>
-
-      <article style="background: var(--surface-card); border: 1px solid var(--outline); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); transition: transform 160ms ease, box-shadow 160ms ease;" style-hover="transform: translateY(-2px); box-shadow: var(--shadow-md);">
-        <span style="display: inline-block; padding: 5px 12px; border-radius: var(--radius-pill); background: var(--neutral-100); color: var(--neutral-700); font-size: var(--text-xs); font-weight: 700; margin-bottom: 16px;">인증 · 보안 · 마감</span>
-        <h3 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); line-height: var(--leading-snug); color: var(--text-strong); margin: 0 0 12px;">로그인 분기 · 보안 정리 · 문서화</h3>
-        <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0 0 14px;">제출·공개 단계에서는 권한 흐름의 안정성과 저장소의 보안·재현성이 중요했습니다.</p>
-        <ul style="margin: 0 0 16px; padding-left: 18px; font-size: var(--text-sm); color: var(--text-body); display: flex; flex-direction: column; gap: 6px;">
-          <li>Supabase 로그인 + 역할별 진입, 로그아웃 오류 수정</li>
-          <li><code style="font-family:ui-monospace,monospace;">.env</code> 민감 키 제거 · <code style="font-family:ui-monospace,monospace;">.gitignore</code> 정리</li>
-          <li>구조·스택·실행법 README 문서화</li>
-        </ul>
-        <p style="font-size: var(--text-sm); color: var(--green-700); font-weight: 600; margin: 0;">→ 공개·제출 리스크를 낮추고 재현 가능한 저장소로 정리</p>
-      </article>
-
-    </div>
-  </section>
-
-  <!-- LIVE DEMO -->
-  <section id="demo" style="max-width: 1080px; margin: 0 auto; padding: 72px 24px 8px;">
-    <div style="display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-xs); font-weight: 700; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--green-700); margin-bottom: 14px;">라이브 데모</div>
-    <h2 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-2xl); line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); color: var(--text-strong); margin: 0 0 10px;">실제로 동작하는 앱</h2>
-    <p style="font-size: var(--text-base); color: var(--text-muted); margin: 0 0 36px; max-width: 40em;">세 역할이 같은 데이터를 다른 화면으로 사용하는 흐름입니다. 각 영상의 재생 버튼을 눌러 직접 확인해 보세요.</p>
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
-
-      <figure style="margin: 0;">
-        <div style="position: relative; background: var(--surface-inverse); border-radius: 22px; padding: 12px; box-shadow: var(--shadow-md);">
-          <video src="assets/demo-player.mp4" controls autoplay loop muted playsinline preload="auto" style="width: 100%; height: auto; display: block; border-radius: 12px; background: #000;"></video>
-          <div data-vid-spinner style="position: absolute; inset: 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.35); pointer-events: none;">
-            <span style="width: 34px; height: 34px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.25); border-top-color: #fff; animation: vidspin 0.8s linear infinite;"></span>
-          </div>
-        </div>
-        <figcaption style="margin-top: 14px;">
-          <span style="display: inline-block; padding: 4px 11px; border-radius: var(--radius-pill); background: var(--green-100); color: var(--green-700); font-size: var(--text-xs); font-weight: 700; margin-bottom: 6px;">선수</span>
-          <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0;">내 경기 · 참석 여부 · 라인업 · 팀 정보 · 리그 일정</p>
-        </figcaption>
-      </figure>
-
-      <figure style="margin: 0;">
-        <div style="position: relative; background: var(--surface-inverse); border-radius: 22px; padding: 12px; box-shadow: var(--shadow-md);">
-          <video src="assets/demo-director.mp4" controls autoplay loop muted playsinline preload="auto" style="width: 100%; height: auto; display: block; border-radius: 12px; background: #000;"></video>
-          <div data-vid-spinner style="position: absolute; inset: 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.35); pointer-events: none;">
-            <span style="width: 34px; height: 34px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.25); border-top-color: #fff; animation: vidspin 0.8s linear infinite;"></span>
-          </div>
-        </div>
-        <figcaption style="margin-top: 14px;">
-          <span style="display: inline-block; padding: 4px 11px; border-radius: var(--radius-pill); background: var(--amber-100); color: var(--amber-700); font-size: var(--text-xs); font-weight: 700; margin-bottom: 6px;">감독</span>
-          <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0;">일정 확인 · 라인업 구성 · 베스트 멤버 · 리뷰 생성</p>
-        </figcaption>
-      </figure>
-
-      <figure style="margin: 0;">
-        <div style="position: relative; background: var(--surface-inverse); border-radius: 22px; padding: 12px; box-shadow: var(--shadow-md);">
-          <video src="assets/demo-manager.mp4" controls autoplay loop muted playsinline preload="auto" style="width: 100%; height: auto; display: block; border-radius: 12px; background: #000;"></video>
-          <div data-vid-spinner style="position: absolute; inset: 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.35); pointer-events: none;">
-            <span style="width: 34px; height: 34px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.25); border-top-color: #fff; animation: vidspin 0.8s linear infinite;"></span>
-          </div>
-        </div>
-        <figcaption style="margin-top: 14px;">
-          <span style="display: inline-block; padding: 4px 11px; border-radius: var(--radius-pill); background: var(--neutral-100); color: var(--neutral-700); font-size: var(--text-xs); font-weight: 700; margin-bottom: 6px;">기록원</span>
-          <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0;">경기 일정 등록 · 수정 · 삭제 중심의 관리 흐름</p>
-        </figcaption>
-      </figure>
-
-    </div>
-  </section>
-
-  <!-- STRENGTH -->
-  <section id="strength" style="background: var(--surface-sunk); border-top: 1px solid var(--outline); border-bottom: 1px solid var(--outline); padding: 72px 0; margin-top: 48px;">
-    <div style="max-width: 1080px; margin: 0 auto; padding: 0 24px;">
-      <div style="display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-xs); font-weight: 700; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--amber-700); margin-bottom: 14px;">AI 스타트업이 볼 강점</div>
-      <h2 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-2xl); line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); color: var(--text-strong); margin: 0 0 36px; max-width: 18em;">빠르게 움직이는 팀에서 바로 쓸 수 있는 신입</h2>
-      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
-
-        <div style="display: flex; gap: 18px; background: var(--surface-card); border: 1px solid var(--outline); border-radius: 14px; padding: 24px;">
-          <div style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--green-100); color: var(--green-700); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md);">01</div>
+      <!-- HERO -->
+      <section style="max-width: 1080px; margin: 0 auto; padding: 72px 24px 56px;">
+        <div style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 48px; align-items: center;">
           <div>
-            <h3 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); margin: 0 0 6px;">끝까지 만드는 실행력</h3>
-            <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0;">화면(UI) → API → DB까지 수직 슬라이스를 혼자 연결해 동작하는 기능으로 만들어 봤습니다.</p>
+            <h1
+              style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-4xl); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); color: var(--text-strong); margin: 0 0 20px; word-break: keep-all;">
+              백로그 조율부터<br> 코드 병합까지,<br>팀의 목표를 잇는 풀스택 리더</h1>
+            <p
+              style="font-size: var(--text-md); color: var(--text-body); margin: 0 0 28px; max-width: 30em; word-break: keep-all;">
+              프로젝트 리더로서 백로그 설계와 효율적인 업무 분배로 협업을 이끌었습니다. 복잡한 머지 충돌을 앞장서서 해결하고 스쿼시 머지를 활용해 깔끔한 버전
+              히스토리를 유지했습니다. 백엔드와 프론트엔드를 넘나드는 풀스택 개발 역량으로 업무 전반을 총괄하며, 팀이 목표한 하나의 안정적인 제품을 완성해 냈습니다.</p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <a href="#work"
+                style="display: inline-flex; align-items: center; padding: 13px 24px; border-radius: var(--radius-md); background: var(--color-primary); color: #fff; font-weight: 700; font-size: var(--text-base); box-shadow: var(--shadow-sm);">한
+                일 살펴보기</a>
+              <a href="https://github.com/intel-app-project/main/tree/codex/hyunseok" target="_blank"
+                style="display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; border-radius: var(--radius-md); background: var(--surface-card); border: 1px solid var(--green-300); color: var(--green-700); font-weight: 700; font-size: var(--text-base);">GitHub
+                저장소 →</a>
+            </div>
+          </div>
+
+          <aside
+            style="background: var(--surface-card); border: 1px solid var(--outline); border-radius: 18px; padding: 28px; box-shadow: var(--shadow-md);">
+            <div
+              style="font-size: var(--text-xs); font-weight: 700; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--text-subtle); margin-bottom: 18px;">
+              한눈에</div>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div
+                style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--outline);">
+                <span style="font-size: var(--text-sm); color: var(--text-muted);">역할</span>
+                <span
+                  style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); text-align: right;">풀스택
+                  · 통합 담당</span>
+              </div>
+              <div
+                style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--outline);">
+                <span style="font-size: var(--text-sm); color: var(--text-muted);">기여</span>
+                <span
+                  style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); text-align: right;">71
+                  커밋 · 25 머지</span>
+              </div>
+              <div
+                style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--outline);">
+                <span style="font-size: var(--text-sm); color: var(--text-muted);">주력</span>
+                <span
+                  style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); text-align: right;">React
+                  Native
+                  · FastAPI · Supabase</span>
+              </div>
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+                <span style="font-size: var(--text-sm); color: var(--text-muted);">AI</span>
+                <span
+                  style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); text-align: right;">Gemini
+                  · Imagen 연동</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- PROJECT -->
+      <section id="project"
+        style="background: var(--surface-sunk); border-top: 1px solid var(--outline); border-bottom: 1px solid var(--outline); padding: 72px 0;">
+        <div style="max-width: 1080px; margin: 0 auto; padding: 0 24px;">
+          <div
+            style="display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-xs); font-weight: 700; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--amber-700); margin-bottom: 14px;">
+            프로젝트</div>
+          <div style="display: grid; grid-template-columns: 1fr 0.9fr; gap: 48px; align-items: center;">
+            <div>
+              <h2
+                style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-2xl); line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); color: var(--text-strong); margin: 0 0 18px; word-break: keep-all;">
+                BTS — 사회인 야구팀 운영 앱</h2>
+              <p style="font-size: var(--text-base); color: var(--text-body); margin: 0 0 18px; word-break: keep-all;">
+                경기 일정 공유, 참석 확인, 라인업
+                구성, 선수 기록이 여러 채널에 흩어져 있던 운영 흐름을 하나의 모바일 앱으로 모았습니다. 선수 · 감독 · 기록원 <strong>세 역할</strong>이 각자 필요한 화면만 보도록
+                설계했습니다.</p>
+              <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0 0 24px; word-break: keep-all;">3인
+                팀 · 약 2주 집중 개발 · 제
+                역할은 <strong style="color: var(--text-body);">백엔드 연동 · 인증/권한 · 공통 구조 · 팀 통합</strong></p>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <span
+                  style="padding: 6px 14px; border-radius: var(--radius-pill); background: var(--green-100); color: var(--green-700); font-size: var(--text-sm); font-weight: 600;">React
+                  Native</span>
+                <span
+                  style="padding: 6px 14px; border-radius: var(--radius-pill); background: var(--green-100); color: var(--green-700); font-size: var(--text-sm); font-weight: 600;">React
+                  Navigation</span>
+                <span
+                  style="padding: 6px 14px; border-radius: var(--radius-pill); background: var(--green-100); color: var(--green-700); font-size: var(--text-sm); font-weight: 600;">FastAPI</span>
+                <span
+                  style="padding: 6px 14px; border-radius: var(--radius-pill); background: var(--green-100); color: var(--green-700); font-size: var(--text-sm); font-weight: 600;">Supabase</span>
+                <span
+                  style="padding: 6px 14px; border-radius: var(--radius-pill); background: var(--amber-100); color: var(--amber-700); font-size: var(--text-sm); font-weight: 600;">Google
+                  GenAI</span>
+                <span
+                  style="padding: 6px 14px; border-radius: var(--radius-pill); background: var(--amber-100); color: var(--amber-700); font-size: var(--text-sm); font-weight: 600;">Imagen</span>
+              </div>
+            </div>
+            <figure
+              style="margin: 0; background: var(--surface-card); border: 1px solid var(--outline); border-radius: 16px; padding: 18px; box-shadow: var(--shadow-md);">
+              <img src="assets/wf-0.png" alt="로그인 후 역할별 화면 분기 와이어프레임"
+                style="width: 100%; height: auto; display: block; border-radius: 10px; background: #fff;">
+              <figcaption
+                style="font-size: var(--text-xs); color: var(--text-muted); margin-top: 12px; text-align: center; word-break: keep-all;">
+                로그인 →
+                역할(선수·감독·기록원)별 진입 분기 · 기획 와이어프레임</figcaption>
+            </figure>
           </div>
         </div>
+      </section>
 
-        <div style="display: flex; gap: 18px; background: var(--surface-card); border: 1px solid var(--outline); border-radius: 14px; padding: 24px;">
-          <div style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--amber-100); color: var(--amber-700); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md);">02</div>
-          <div>
-            <h3 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); margin: 0 0 6px;">AI/LLM 연동 경험</h3>
-            <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0;">Gemini·Imagen를 외부 API 호출, 프롬프트 설계, 실패 fallback까지 실제 사용자 흐름으로 붙여 봤습니다.</p>
+      <!-- WORK -->
+      <section id="work" style="max-width: 1080px; margin: 0 auto; padding: 72px 24px 24px;">
+        <div
+          style="display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-xs); font-weight: 700; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--green-700); margin-bottom: 14px;">
+          내가 한 일</div>
+        <h2
+          style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-2xl); line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); color: var(--text-strong); margin: 0 0 12px; word-break: keep-all;">
+          문제 → 한 일 → 결과</h2>
+        <p
+          style="font-size: var(--text-base); color: var(--text-muted); margin: 0 0 36px; max-width: 40em; word-break: keep-all;">
+          화면 하나를
+          맡기보다, 데이터·API·화면·팀 사이의 연결을 계속 해결한 기여입니다. 모든 항목은 Git 기록으로 확인됩니다.</p>
+
+        <!-- Feature card: Git 통합 -->
+        <article
+          style="background: var(--surface-inverse); color: var(--text-on-color); border-radius: 18px; padding: 36px; box-shadow: var(--shadow-md); margin-bottom: 24px;">
+          <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 36px; align-items: center;">
+            <div>
+              <span
+                style="display: inline-block; padding: 5px 12px; border-radius: var(--radius-pill); background: color-mix(in srgb, var(--green-400) 30%, transparent); color: var(--green-100); font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.04em; margin-bottom: 16px;">협업
+                · 버전관리</span>
+              <h3
+                style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-xl); line-height: var(--leading-snug); color: #fff; margin: 0 0 14px; word-break: keep-all;">
+                여러 명의 작업을 하나의 앱으로 통합</h3>
+              <p style="font-size: var(--text-base); color: var(--green-100); margin: 0 0 18px; word-break: keep-all;">
+                후반에 5개 이상의 feature 브랜치가
+                동시에 병합되며 충돌·깨진 화면·중복 파일이 생겼습니다. 단순 merge에 그치지 않고 <strong style="color:#fff;">syntax error 수정, 잘못된 UI 변경
+                  revert, 공통 navigation 연결, 중복 화면 정리</strong>로 팀 기능이 하나의 흐름으로 동작하도록 만들었습니다.</p>
+              <p style="font-size: var(--text-sm); color: #fff; font-weight: 600; margin: 0; word-break: keep-all;">→ 각자
+                만든 화면이 하나의 제품으로 연결되고,
+                제출 가능한 안정 상태로 마감</p>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; align-items: baseline; gap: 12px;">
+                <span
+                  style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-3xl); color: #fff; line-height: 1;">25</span>
+                <span style="font-size: var(--text-sm); color: var(--green-200);">merge 커밋으로<br>dev 브랜치 통합 주도</span>
+              </div>
+              <div style="height: 1px; background: color-mix(in srgb, var(--green-300) 30%, transparent);"></div>
+              <div style="display: flex; flex-direction: column; gap: 9px;">
+                <div style="display: flex; align-items: baseline; gap: 10px;">
+                  <code
+                    style="flex: none; color: var(--green-300); font-size: var(--text-xs); font-family: ui-monospace, monospace;">903f517</code>
+                  <span style="font-size: var(--text-sm); color: var(--green-100);">화면 전환을 MainTabNavigator로 통합</span>
+                </div>
+                <div style="display: flex; align-items: baseline; gap: 10px;">
+                  <code
+                    style="flex: none; color: var(--green-300); font-size: var(--text-xs); font-family: ui-monospace, monospace;">9a3e9b8</code>
+                  <span style="font-size: var(--text-sm); color: var(--green-100);">감독·선수 footer를 공통 컴포넌트로 통합</span>
+                </div>
+                <div style="display: flex; align-items: baseline; gap: 10px;">
+                  <code
+                    style="flex: none; color: var(--green-300); font-size: var(--text-xs); font-family: ui-monospace, monospace;">8966556</code>
+                  <span style="font-size: var(--text-sm); color: var(--green-100);">병합 후 syntax error·버튼 복구</span>
+                </div>
+                <div style="display: flex; align-items: baseline; gap: 10px;">
+                  <code
+                    style="flex: none; color: var(--green-300); font-size: var(--text-xs); font-family: ui-monospace, monospace;">35e7c67</code>
+                  <span style="font-size: var(--text-sm); color: var(--green-100);">구조와 안 맞는 UI 변경 revert</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+
+          <article
+            style="background: var(--surface-card); border: 1px solid var(--outline); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); transition: transform 160ms ease, box-shadow 160ms ease;"
+            style-hover="transform: translateY(-2px); box-shadow: var(--shadow-md);">
+            <span
+              style="display: inline-block; padding: 5px 12px; border-radius: var(--radius-pill); background: var(--green-100); color: var(--green-700); font-size: var(--text-xs); font-weight: 700; margin-bottom: 16px;">프론트엔드
+              · 구조</span>
+            <h3
+              style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); line-height: var(--leading-snug); color: var(--text-strong); margin: 0 0 12px; word-break: keep-all;">
+              역할 기반 내비게이션 재설계</h3>
+            <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0 0 14px; word-break: keep-all;">화면이
+              늘며 <code style="font-family:ui-monospace,monospace;">useState</code> 기반 분기가 복잡해지고 footer가 역할별로 중복됐습니다.</p>
+            <ul
+              style="margin: 0 0 16px; padding-left: 18px; font-size: var(--text-sm); color: var(--text-body); display: flex; flex-direction: column; gap: 6px;">
+              <li style="word-break: keep-all;">React Navigation 기반 <code
+                  style="font-family:ui-monospace,monospace;">MainTabNavigator</code> 도입</li>
+              <li style="word-break: keep-all;">Supabase <code
+                  style="font-family:ui-monospace,monospace;">Primary_Position</code>으로 역할별 탭 분기</li>
+              <li style="word-break: keep-all;">중복 footer를 <code
+                  style="font-family:ui-monospace,monospace;">CommonFooter</code>로 통합</li>
+            </ul>
+            <p
+              style="font-size: var(--text-sm); color: var(--green-700); font-weight: 600; margin: 0; word-break: keep-all;">
+              → 화면 추가·유지보수 비용을
+              낮춘 구조 확보</p>
+          </article>
+
+          <article
+            style="background: var(--surface-card); border: 1px solid var(--outline); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); transition: transform 160ms ease, box-shadow 160ms ease;"
+            style-hover="transform: translateY(-2px); box-shadow: var(--shadow-md);">
+            <span
+              style="display: inline-block; padding: 5px 12px; border-radius: var(--radius-pill); background: var(--green-100); color: var(--green-700); font-size: var(--text-xs); font-weight: 700; margin-bottom: 16px;">백엔드
+              · 데이터</span>
+            <h3
+              style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); line-height: var(--leading-snug); color: var(--text-strong); margin: 0 0 12px; word-break: keep-all;">
+              FastAPI–Supabase 연동 & CSV 파이프라인</h3>
+            <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0 0 14px; word-break: keep-all;">앱이
+              팀·선수·경기 데이터를 안정적으로 쓰려면
+              API 계층이, 기록 입력엔 대량 반영 흐름이 필요했습니다.</p>
+            <ul
+              style="margin: 0 0 16px; padding-left: 18px; font-size: var(--text-sm); color: var(--text-body); display: flex; flex-direction: column; gap: 6px;">
+              <li style="word-break: keep-all;">FastAPI–Supabase 조회 API 계층 구축</li>
+              <li style="word-break: keep-all;"><code style="font-family:ui-monospace,monospace;">pandas</code> 기반 CSV
+                업로드 → DB 반영</li>
+              <li style="word-break: keep-all;">기록원 업로드 화면과 endpoint 정합</li>
+            </ul>
+            <p
+              style="font-size: var(--text-sm); color: var(--green-700); font-weight: 600; margin: 0; word-break: keep-all;">
+              → 파일 입력 → 서버 처리
+              → DB 저장 파이프라인 완성</p>
+          </article>
+
+          <article
+            style="background: var(--surface-card); border: 1px solid var(--outline); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); transition: transform 160ms ease, box-shadow 160ms ease;"
+            style-hover="transform: translateY(-2px); box-shadow: var(--shadow-md);">
+            <span
+              style="display: inline-block; padding: 5px 12px; border-radius: var(--radius-pill); background: var(--amber-100); color: var(--amber-700); font-size: var(--text-xs); font-weight: 700; margin-bottom: 16px;">풀스택
+              · AI</span>
+            <h3
+              style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); line-height: var(--leading-snug); color: var(--text-strong); margin: 0 0 12px; word-break: keep-all;">
+              선수 상세 통계 + AI PR 카드</h3>
+            <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0 0 14px; word-break: keep-all;">단순
+              프로필이 아니라 기록 분석부터 AI 이미지
+              생성까지 한 화면에 모여 상태·오류 처리 난도가 높았습니다.</p>
+            <ul
+              style="margin: 0 0 16px; padding-left: 18px; font-size: var(--text-sm); color: var(--text-body); display: flex; flex-direction: column; gap: 6px;">
+              <li style="word-break: keep-all;">경기 데이터로 타율·출루율·ERA·WHIP 등 계산</li>
+              <li style="word-break: keep-all;">Gemini로 프롬프트 → Imagen 이미지 생성 연동</li>
+              <li style="word-break: keep-all;">생성 이미지 미리보기·저장, 실패 시 fallback</li>
+            </ul>
+            <p
+              style="font-size: var(--text-sm); color: var(--amber-700); font-weight: 600; margin: 0; word-break: keep-all;">
+              → 기록 분석 → 리뷰 →
+              카드 생성으로 이어지는 차별화 기능</p>
+          </article>
+
+          <article
+            style="background: var(--surface-card); border: 1px solid var(--outline); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-sm); transition: transform 160ms ease, box-shadow 160ms ease;"
+            style-hover="transform: translateY(-2px); box-shadow: var(--shadow-md);">
+            <span
+              style="display: inline-block; padding: 5px 12px; border-radius: var(--radius-pill); background: var(--neutral-100); color: var(--neutral-700); font-size: var(--text-xs); font-weight: 700; margin-bottom: 16px;">인증
+              · 보안 · 마감</span>
+            <h3
+              style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-lg); line-height: var(--leading-snug); color: var(--text-strong); margin: 0 0 12px; word-break: keep-all;">
+              로그인 분기 · 보안 정리 · 문서화</h3>
+            <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0 0 14px; word-break: keep-all;">
+              제출·공개 단계에서는 권한 흐름의 안정성과
+              저장소의 보안·재현성이 중요했습니다.</p>
+            <ul
+              style="margin: 0 0 16px; padding-left: 18px; font-size: var(--text-sm); color: var(--text-body); display: flex; flex-direction: column; gap: 6px;">
+              <li style="word-break: keep-all;">Supabase 로그인 + 역할별 진입, 로그아웃 오류 수정</li>
+              <li style="word-break: keep-all;"><code style="font-family:ui-monospace,monospace;">.env</code> 민감 키 제거 ·
+                <code style="font-family:ui-monospace,monospace;">.gitignore</code> 정리</li>
+              <li style="word-break: keep-all;">구조·스택·실행법 README 문서화</li>
+            </ul>
+            <p
+              style="font-size: var(--text-sm); color: var(--green-700); font-weight: 600; margin: 0; word-break: keep-all;">
+              → 공개·제출 리스크를 낮추고
+              재현 가능한 저장소로 정리</p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- LIVE DEMO -->
+      <section id="demo" style="max-width: 1080px; margin: 0 auto; padding: 72px 24px 8px;">
+        <div
+          style="display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-xs); font-weight: 700; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--green-700); margin-bottom: 14px;">
+          라이브 데모</div>
+        <h2
+          style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-2xl); line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); color: var(--text-strong); margin: 0 0 12px; word-break: keep-all;">
+          실제로 동작하는 앱</h2>
+        <p
+          style="font-size: var(--text-base); color: var(--text-muted); margin: 0 0 36px; max-width: 40em; word-break: keep-all;">
+          세 역할이 같은
+          데이터를 다른 화면으로 사용하는 흐름입니다. 각 영상의 재생 버튼을 눌러 직접 확인해 보세요.</p>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+
+          <figure style="margin: 0;">
+            <div
+              style="position: relative; background: var(--surface-inverse); border-radius: 22px; padding: 12px; box-shadow: var(--shadow-md);">
+              <video src="assets/demo-player.mp4" controls autoplay loop muted playsinline preload="auto"
+                style="width: 100%; height: auto; display: block; border-radius: 12px; background: #000;"></video>
+              <div data-vid-spinner
+                style="position: absolute; inset: 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.35); pointer-events: none;">
+                <span
+                  style="width: 34px; height: 34px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.25); border-top-color: #fff; animation: vidspin 0.8s linear infinite;"></span>
+              </div>
+            </div>
+            <figcaption style="margin-top: 14px;">
+              <span
+                style="display: inline-block; padding: 4px 11px; border-radius: var(--radius-pill); background: var(--green-100); color: var(--green-700); font-size: var(--text-xs); font-weight: 700; margin-bottom: 6px;">선수</span>
+              <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0; word-break: keep-all;">내 경기 · 참석
+                여부 · 라인업 · 팀 정보 · 리그
+                일정</p>
+            </figcaption>
+          </figure>
+
+          <figure style="margin: 0;">
+            <div
+              style="position: relative; background: var(--surface-inverse); border-radius: 22px; padding: 12px; box-shadow: var(--shadow-md);">
+              <video src="assets/demo-director.mp4" controls autoplay loop muted playsinline preload="auto"
+                style="width: 100%; height: auto; display: block; border-radius: 12px; background: #000;"></video>
+              <div data-vid-spinner
+                style="position: absolute; inset: 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.35); pointer-events: none;">
+                <span
+                  style="width: 34px; height: 34px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.25); border-top-color: #fff; animation: vidspin 0.8s linear infinite;"></span>
+              </div>
+            </div>
+            <figcaption style="margin-top: 14px;">
+              <span
+                style="display: inline-block; padding: 4px 11px; border-radius: var(--radius-pill); background: var(--amber-100); color: var(--amber-700); font-size: var(--text-xs); font-weight: 700; margin-bottom: 6px;">감독</span>
+              <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0; word-break: keep-all;">일정 확인 ·
+                라인업 구성 · 베스트 멤버 · 리뷰 생성
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure style="margin: 0;">
+            <div
+              style="position: relative; background: var(--surface-inverse); border-radius: 22px; padding: 12px; box-shadow: var(--shadow-md);">
+              <video src="assets/demo-manager.mp4" controls autoplay loop muted playsinline preload="auto"
+                style="width: 100%; height: auto; display: block; border-radius: 12px; background: #000;"></video>
+              <div data-vid-spinner
+                style="position: absolute; inset: 12px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.35); pointer-events: none;">
+                <span
+                  style="width: 34px; height: 34px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.25); border-top-color: #fff; animation: vidspin 0.8s linear infinite;"></span>
+              </div>
+            </div>
+            <figcaption style="margin-top: 14px;">
+              <span
+                style="display: inline-block; padding: 4px 11px; border-radius: var(--radius-pill); background: var(--neutral-100); color: var(--neutral-700); font-size: var(--text-xs); font-weight: 700; margin-bottom: 6px;">기록원</span>
+              <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0; word-break: keep-all;">경기 일정 등록
+                · 수정 · 삭제 중심의 관리 흐름
+              </p>
+            </figcaption>
+          </figure>
+
+        </div>
+      </section>
+
+      <!-- STRENGTH -->
+      <section id="strength"
+        style="background: var(--surface-sunk); border-top: 1px solid var(--outline); border-bottom: 1px solid var(--outline); padding: 72px 0; margin-top: 48px;">
+        <div style="max-width: 1080px; margin: 0 auto; padding: 0 24px;">
+          <div
+            style="display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-xs); font-weight: 700; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--amber-700); margin-bottom: 14px;">
+            핵심 강점</div>
+          <h2
+            style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-2xl); line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); color: var(--text-strong); margin: 0 0 12px;">
+            빠르게 움직이는 팀에서 적응하는 개발자</h2>
+          <p style="font-size: var(--text-base); color: var(--text-muted); margin: 0 0 36px; max-width: 40em;">새로운 기술과
+            환경을 빠르게 학습하여 적용합니다.
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+
+            <div
+              style="display: flex; gap: 18px; background: var(--surface-card); border: 1px solid var(--outline); border-radius: 14px; padding: 24px;">
+              <div
+                style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--green-100); color: var(--green-700); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md);">
+                01</div>
+              <div>
+                <h3
+                  style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); margin: 0 0 6px; word-break: keep-all;">
+                  끝까지 만드는 실행력</h3>
+                <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0; word-break: keep-all;">화면(UI)
+                  → API → DB까지 수직 슬라이스를
+                  혼자 연결해 동작하는 기능으로 만들어 봤습니다.</p>
+              </div>
+            </div>
+
+            <div
+              style="display: flex; gap: 18px; background: var(--surface-card); border: 1px solid var(--outline); border-radius: 14px; padding: 24px;">
+              <div
+                style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--amber-100); color: var(--amber-700); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md);">
+                02</div>
+              <div>
+                <h3
+                  style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); margin: 0 0 6px; word-break: keep-all;">
+                  AI/LLM 연동 경험</h3>
+                <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0; word-break: keep-all;">
+                  Gemini·Imagen를 외부 API 호출,
+                  프롬프트 설계, 실패 fallback까지 실제 사용자 흐름으로 붙여 봤습니다.</p>
+              </div>
+            </div>
+
+            <div
+              style="display: flex; gap: 18px; background: var(--surface-card); border: 1px solid var(--outline); border-radius: 14px; padding: 24px;">
+              <div
+                style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--green-100); color: var(--green-700); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md);">
+                03</div>
+              <div>
+                <h3
+                  style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); margin: 0 0 6px; word-break: keep-all;">
+                  협업·Git 역량</h3>
+                <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0; word-break: keep-all;">PR 기반
+                  협업, 25번의 병합, 충돌·revert
+                  판단으로 여러 사람의 작업을 하나로 합쳐 봤습니다.</p>
+              </div>
+            </div>
+
+            <div
+              style="display: flex; gap: 18px; background: var(--surface-card); border: 1px solid var(--outline); border-radius: 14px; padding: 24px;">
+              <div
+                style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--neutral-100); color: var(--neutral-700); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md);">
+                04</div>
+              <div>
+                <h3
+                  style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); margin: 0 0 6px; word-break: keep-all;">
+                  운영·보안 감각</h3>
+                <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0; word-break: keep-all;">민감 키
+                  제거, gitignore 정리, 문서화 등
+                  제품을 공개·제출 가능한 상태로 마감하는 습관이 있습니다.</p>
+              </div>
+            </div>
+
           </div>
         </div>
+      </section>
 
-        <div style="display: flex; gap: 18px; background: var(--surface-card); border: 1px solid var(--outline); border-radius: 14px; padding: 24px;">
-          <div style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--green-100); color: var(--green-700); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md);">03</div>
-          <div>
-            <h3 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); margin: 0 0 6px;">협업·Git 역량</h3>
-            <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0;">PR 기반 협업, 25번의 병합, 충돌·revert 판단으로 여러 사람의 작업을 하나로 합쳐 봤습니다.</p>
+      <!-- WIREFRAME GALLERY -->
+      <section style="max-width: 1080px; margin: 0 auto; padding: 64px 24px 8px;">
+        <div
+          style="display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-xs); font-weight: 700; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--text-subtle); margin-bottom: 14px;">
+          기획 → 구현</div>
+        <h2
+          style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-2xl); line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); color: var(--text-strong); margin: 0 0 12px; word-break: keep-all;">
+          기획에 따른 구현</h2>
+        <p
+          style="font-size: var(--text-base); color: var(--text-muted); margin: 0 0 36px; max-width: 40em; word-break: keep-all;">
+          역할별 사용 흐름을 와이어프레임으로 정의한 뒤
+          React Native 화면으로 구현했습니다.</p>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+          <figure
+            style="margin: 0; background: var(--surface-sunk); border: 1px solid var(--outline); border-radius: 14px; padding: 16px;">
+            <img src="assets/wf-1-123.png" alt="선수 화면 흐름 와이어프레임"
+              style="width: 100%; height: auto; display: block; border-radius: 8px; background: #fff;">
+            <figcaption
+              style="font-size: var(--text-xs); color: var(--text-muted); margin-top: 12px; text-align: center; word-break: keep-all;">
+              선수 — 내
+              경기 · 라인업 · 참석 현황</figcaption>
+          </figure>
+          <figure
+            style="margin: 0; background: var(--surface-sunk); border: 1px solid var(--outline); border-radius: 14px; padding: 16px;">
+            <img src="assets/wf-2-678.png" alt="감독 화면 흐름 와이어프레임"
+              style="width: 100%; height: auto; display: block; border-radius: 8px; background: #fff;">
+            <figcaption
+              style="font-size: var(--text-xs); color: var(--text-muted); margin-top: 12px; text-align: center; word-break: keep-all;">
+              감독 — 예정
+              경기 · 라인업 · 불참 사유 확인</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact" style="max-width: 1080px; margin: 0 auto; padding: 64px 24px 88px;">
+        <div
+          style="background: var(--surface-inverse); border-radius: 22px; padding: 56px 48px; text-align: center; box-shadow: var(--shadow-md);">
+          <h2
+            style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-2xl); line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); color: #fff; margin: 0 0 14px; word-break: keep-all;">
+            함께 만들 기회를 찾고 있습니다</h2>
+          <p style="font-size: var(--text-md); color: var(--green-100); margin: 0 0 32px; word-break: keep-all;">AI 서비스를
+            끝까지 만들고 안정화하는 일에 관심
+            있습니다. 편하게 연락 주세요.</p>
+          <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+            <a href="mailto:testwelltest01@gmail.com"
+              style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; border-radius: var(--radius-md); background: #fff; color: var(--green-800); font-weight: 700; font-size: var(--text-base);">testwelltest01@gmail.com</a>
+            <a href="https://github.com/intel-app-project/main/tree/codex/hyunseok" target="_blank"
+              style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; border-radius: var(--radius-md); background: transparent; border: 1px solid color-mix(in srgb, var(--green-300) 40%, transparent); color: #fff; font-weight: 700; font-size: var(--text-base);">GitHub
+              →</a>
           </div>
         </div>
+        <p
+          style="text-align: center; font-size: var(--text-xs); color: var(--text-subtle); margin: 32px 0 0; word-break: keep-all;">
+          최현석 · AI
+          서비스 개발자 · BTS(Baseball Team System) 포트폴리오</p>
+      </section>
 
-        <div style="display: flex; gap: 18px; background: var(--surface-card); border: 1px solid var(--outline); border-radius: 14px; padding: 24px;">
-          <div style="flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--neutral-100); color: var(--neutral-700); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md);">04</div>
-          <div>
-            <h3 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-md); color: var(--text-strong); margin: 0 0 6px;">운영·보안 감각</h3>
-            <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0;">민감 키 제거, gitignore 정리, 문서화 등 제품을 공개·제출 가능한 상태로 마감하는 습관이 있습니다.</p>
-          </div>
-        </div>
-
-      </div>
     </div>
-  </section>
-
-  <!-- WIREFRAME GALLERY -->
-  <section style="max-width: 1080px; margin: 0 auto; padding: 64px 24px 8px;">
-    <div style="display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-xs); font-weight: 700; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--text-subtle); margin-bottom: 14px;">기획 → 구현</div>
-    <h2 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-xl); line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); color: var(--text-strong); margin: 0 0 8px;">화면을 먼저 설계하고 만들었습니다</h2>
-    <p style="font-size: var(--text-sm); color: var(--text-muted); margin: 0 0 28px;">역할별 사용 흐름을 와이어프레임으로 정의한 뒤 React Native 화면으로 구현했습니다.</p>
-    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
-      <figure style="margin: 0; background: var(--surface-sunk); border: 1px solid var(--outline); border-radius: 14px; padding: 16px;">
-        <img src="assets/wf-1-123.png" alt="선수 화면 흐름 와이어프레임" style="width: 100%; height: auto; display: block; border-radius: 8px; background: #fff;">
-        <figcaption style="font-size: var(--text-xs); color: var(--text-muted); margin-top: 12px; text-align: center;">선수 — 내 경기 · 라인업 · 참석 현황</figcaption>
-      </figure>
-      <figure style="margin: 0; background: var(--surface-sunk); border: 1px solid var(--outline); border-radius: 14px; padding: 16px;">
-        <img src="assets/wf-2-678.png" alt="감독 화면 흐름 와이어프레임" style="width: 100%; height: auto; display: block; border-radius: 8px; background: #fff;">
-        <figcaption style="font-size: var(--text-xs); color: var(--text-muted); margin-top: 12px; text-align: center;">감독 — 예정 경기 · 라인업 · 불참 사유 확인</figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact" style="max-width: 1080px; margin: 0 auto; padding: 64px 24px 88px;">
-    <div style="background: var(--surface-inverse); border-radius: 22px; padding: 56px 48px; text-align: center; box-shadow: var(--shadow-md);">
-      <h2 style="font-family: var(--font-heading); font-weight: 600; font-size: var(--text-2xl); line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); color: #fff; margin: 0 0 14px;">함께 만들 기회를 찾고 있습니다</h2>
-      <p style="font-size: var(--text-md); color: var(--green-100); margin: 0 0 32px;">AI 서비스를 끝까지 만들고 안정화하는 일에 관심 있습니다. 편하게 연락 주세요.</p>
-      <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
-        <a href="mailto:testwelltest01@gmail.com" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; border-radius: var(--radius-md); background: #fff; color: var(--green-800); font-weight: 700; font-size: var(--text-base);">testwelltest01@gmail.com</a>
-        <a href="https://github.com/intel-app-project/main/tree/codex/hyunseok" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; border-radius: var(--radius-md); background: transparent; border: 1px solid color-mix(in srgb, var(--green-300) 40%, transparent); color: #fff; font-weight: 700; font-size: var(--text-base);">GitHub →</a>
-      </div>
-    </div>
-    <p style="text-align: center; font-size: var(--text-xs); color: var(--text-subtle); margin: 32px 0 0;">최현석 · AI 서비스 개발자 · BTS(Baseball Team System) 포트폴리오</p>
-  </section>
-
-</div>
-</x-dc>
+  </x-dc>
 </body>
+
 </html>

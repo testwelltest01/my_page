@@ -1,11 +1,11 @@
 /* Terra — Typography tokens
-   Headlines: Literata (warm serif, personality).
-   Body / labels: Nunito Sans (friendly, rounded).
-   Generous, unhurried line-height. */
+   Headlines: Noto Serif KR for warm Korean display text.
+   Body / labels: Pretendard for crisp Korean UI readability.
+   Korean copy uses relaxed line-height and neutral tracking. */
 
 :root {
-  --font-serif: "Literata", Georgia, "Times New Roman", serif;
-  --font-sans:  "Nunito Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Noto Serif KR", "Apple SD Gothic Neo", "Malgun Gothic", serif;
+  --font-sans:  "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Families by role */
   --font-display: var(--font-serif);
@@ -30,16 +30,16 @@
   --weight-semibold: 600;
   --weight-bold:     700;
 
-  /* Line-heights — generous, unhurried */
-  --leading-tight:  1.18;
-  --leading-snug:   1.32;
-  --leading-normal: 1.55;
-  --leading-body:   1.65;
-  --leading-loose:  1.8;
+  /* Line-heights — relaxed for Korean copy */
+  --leading-tight:  1.25;
+  --leading-snug:   1.38;
+  --leading-normal: 1.62;
+  --leading-body:   1.72;
+  --leading-loose:  1.86;
 
   /* Letter-spacing */
-  --tracking-tight:  -0.02em;
+  --tracking-tight:  0;
   --tracking-normal: 0;
-  --tracking-wide:   0.04em;
-  --tracking-label:  0.06em;
+  --tracking-wide:   0;
+  --tracking-label:  0;
 }

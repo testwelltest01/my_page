@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+
+const DEFAULT_API_URL = "https://jsonplaceholder.typicode.com/users";
 
 export default function Api() {
   // API의 url
-  const [url, setUrl] = useState("https://jsonplaceholder.typicode.com/users");
+  const [url, setUrl] = useState(DEFAULT_API_URL);
 
   // 실제 API 데이터
   const [data, setData] = useState(null);
@@ -13,10 +15,10 @@ export default function Api() {
   // 활성 탭 상태 관리
   const [activeTab, setActiveTab] = useState("info");
 
-  const fetchData = async (e) => {
+  const fetchData = useCallback(async (requestUrl) => {
     try {
       // 1️⃣ API 요청
-      const response = await fetch(e);
+      const response = await fetch(requestUrl);
 
       // 2️⃣ header에서 필요한 정보 추출
       const contentType = response.headers.get("content-type");
@@ -43,11 +45,11 @@ export default function Api() {
       if (contentType && contentType.includes("application/json")) {
         bodyData = await response.json();
       } else if (contentType && contentType.includes("image/")) {
-        bodyData = { type: "image", url: e };
+        bodyData = { type: "image", url: requestUrl };
       } else if (contentType && contentType.includes("audio/")) {
-        bodyData = { type: "audio", url: e };
+        bodyData = { type: "audio", url: requestUrl };
       } else if (contentType && contentType.includes("video/")) {
-        bodyData = { type: "video", url: e };
+        bodyData = { type: "video", url: requestUrl };
       } else {
         bodyData = await response.text();
         if (typeof bodyData === "string" && bodyData.length > 1000) {
@@ -67,41 +69,48 @@ export default function Api() {
         message: error.message,
       });
     }
-  };
-
-  useEffect(() => {
-    fetchData(url);
   }, []);
 
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      fetchData(DEFAULT_API_URL);
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [fetchData]);
+
   return (
-    <div className="p-6 md:p-12 animate-mac-fade-in max-w-6xl mx-auto flex flex-col gap-8 h-[calc(100vh-100px)]">
+    <div className="w-full max-w-6xl mx-auto p-4 sm:p-6 md:p-12 animate-mac-fade-in flex flex-col gap-5 sm:gap-8 min-h-[calc(100vh-100px)] md:h-[calc(100vh-100px)]">
       <header className="flex flex-col gap-2">
         <h1 className="mac-h1 text-3xl">Network Inspector</h1>
         <p className="mac-body text-mac-text-secondary">
           Monitor API responses and inspect user data with macOS-inspired
           precision.
         </p>
-        <div className="flex items-center gap-3">
-          <p className="mac-body text-mac-text-secondary whitespace-nowrap">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 min-w-0">
+          <p className="mac-body text-mac-text-secondary whitespace-nowrap shrink-0">
             API endpoint 💻
           </p>
           <input
             type="text"
-            className="mac-search flex-1 focus:w-[400px] transition-all"
+            className="mac-search w-full min-w-0 sm:flex-1 sm:focus:w-[400px] transition-all"
             value={url}
-            placeholder="https://jsonplaceholder.typicode.com/users"
+            placeholder={DEFAULT_API_URL}
             onChange={(e) => setUrl(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && fetchData(url)}
           />
-          <button onClick={() => fetchData(url)} className="mac-button-primary">
+          <button
+            onClick={() => fetchData(url)}
+            className="mac-button-primary w-full sm:w-auto"
+          >
             Enter
           </button>
         </div>
       </header>
 
-      <div className="mac-window flex-1 flex overflow-hidden shadow-2xl">
+      <div className="mac-window flex-1 flex flex-col md:flex-row overflow-hidden shadow-2xl min-w-0">
         {/* 사이드바 */}
-        <aside className="mac-sidebar p-4 flex flex-col gap-2 shrink-0">
+        <aside className="mac-sidebar w-full md:w-[260px] p-3 sm:p-4 flex flex-wrap md:flex-nowrap md:flex-col gap-2 shrink-0 overflow-hidden md:overflow-visible border-r-0 md:border-r">
           <div className="mac-traffic-lights mb-6">
             <div className="mac-dot mac-dot-close" />
             <div className="mac-dot mac-dot-min" />
@@ -109,22 +118,25 @@ export default function Api() {
           </div>
 
           <button
+            type="button"
             onClick={() => setActiveTab("info")}
-            className={`mac-nav-item transition-all duration-200 ${activeTab === "info" ? "active shadow-sm" : ""}`}
+            className={`mac-nav-item flex-1 basis-[145px] md:basis-auto md:flex-none md:w-full whitespace-nowrap transition-all duration-200 ${activeTab === "info" ? "active shadow-sm" : ""}`}
           >
             <span className="text-lg">📊</span>
             Response Info
           </button>
           <button
+            type="button"
             onClick={() => setActiveTab("data")}
-            className={`mac-nav-item transition-all duration-200 ${activeTab === "data" ? "active shadow-sm" : ""}`}
+            className={`mac-nav-item flex-1 basis-[145px] md:basis-auto md:flex-none md:w-full whitespace-nowrap transition-all duration-200 ${activeTab === "data" ? "active shadow-sm" : ""}`}
           >
             <span className="text-lg">👥</span>
             API Data
           </button>
           <button
+            type="button"
             onClick={() => setActiveTab("guide")}
-            className={`mac-nav-item transition-all duration-200 ${activeTab === "guide" ? "active shadow-sm" : ""}`}
+            className={`mac-nav-item flex-1 basis-[145px] md:basis-auto md:flex-none md:w-full whitespace-nowrap transition-all duration-200 ${activeTab === "guide" ? "active shadow-sm" : ""}`}
           >
             <span className="text-lg">📚</span>
             Content Guide
@@ -132,10 +144,10 @@ export default function Api() {
         </aside>
 
         {/* 메인 콘텐츠 영역 */}
-        <main className="flex-1 bg-mac-surface-opaque/30 backdrop-blur-2xl p-8 overflow-auto">
+        <main className="flex-1 min-w-0 bg-mac-surface-opaque/30 backdrop-blur-2xl p-4 sm:p-6 md:p-8 overflow-auto">
           {activeTab === "info" ? (
             <div className="flex flex-col gap-6 animate-mac-slide-up">
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                 <h2 className="mac-h2">Response Metadata</h2>
                 {responseInfo && (
                   <span
@@ -148,7 +160,7 @@ export default function Api() {
                 )}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 min-w-[450pt]">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 min-w-0">
                 {responseInfo ? (
                   Object.entries(responseInfo).map(([key, value]) => (
                     <div
@@ -177,14 +189,14 @@ export default function Api() {
             </div>
           ) : activeTab === "data" ? (
             <div className="flex flex-col gap-6 animate-mac-slide-up">
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                 <h2 className="mac-h2">API Data</h2>
                 <div className="mac-badge bg-mac-blue/5 text-mac-blue border-mac-blue/10">
                   {data?.length || 0} items
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-4 min-w-[450pt]">
+              <div className="grid grid-cols-1 gap-4 min-w-0">
                 {data && data.type === "image" ? (
                   <div className="mac-card flex flex-col items-center gap-4 p-8">
                     <img
@@ -192,7 +204,7 @@ export default function Api() {
                       alt="API Response"
                       className="rounded-lg shadow-lg max-w-full h-auto max-h-[400px] border border-mac-border/20"
                     />
-                    <p className="mac-caption opacity-60">
+                    <p className="mac-caption opacity-60 break-all">
                       Image detected: {data.url}
                     </p>
                   </div>
@@ -202,7 +214,7 @@ export default function Api() {
                       <source src={data.url} />
                       Your browser does not support the audio element.
                     </audio>
-                    <p className="mac-caption opacity-60">
+                    <p className="mac-caption opacity-60 break-all">
                       Audio detected: {data.url}
                     </p>
                   </div>
@@ -215,12 +227,12 @@ export default function Api() {
                       <source src={data.url} />
                       Your browser does not support the video element.
                     </video>
-                    <p className="mac-caption opacity-60">
+                    <p className="mac-caption opacity-60 break-all">
                       Video detected: {data.url}
                     </p>
                   </div>
                 ) : typeof data === "string" ? (
-                  <div className="mac-card p-6 whitespace-pre-wrap font-mono text-xs opacity-80 border-mac-border/10">
+                  <div className="mac-card p-4 sm:p-6 whitespace-pre-wrap break-words overflow-x-auto font-mono text-xs opacity-80 border-mac-border/10">
                     {data}
                   </div>
                 ) : (
@@ -240,10 +252,10 @@ export default function Api() {
                           {Object.entries(item).map(([key, value]) => (
                             <div
                               key={key}
-                              className="flex justify-between items-center mac-caption overflow-hidden gap-4"
+                              className="flex flex-col sm:flex-row sm:justify-between sm:items-center mac-caption overflow-hidden gap-1 sm:gap-4"
                             >
                               <span className="opacity-40 shrink-0">{key}</span>
-                              <span className="font-medium truncate text-right">
+                              <span className="font-medium break-words sm:truncate sm:text-right min-w-0 max-w-full">
                                 {typeof value === "object"
                                   ? JSON.stringify(value)
                                   : String(value)}
@@ -259,10 +271,10 @@ export default function Api() {
                         {Object.entries(data).map(([key, value]) => (
                           <div
                             key={key}
-                            className="flex justify-between items-center mac-caption overflow-hidden gap-4"
+                            className="flex flex-col sm:flex-row sm:justify-between sm:items-center mac-caption overflow-hidden gap-1 sm:gap-4"
                           >
                             <span className="opacity-40 shrink-0">{key}</span>
-                            <span className="font-medium truncate text-right">
+                            <span className="font-medium break-words sm:truncate sm:text-right min-w-0 max-w-full">
                               {typeof value === "object"
                                 ? JSON.stringify(value)
                                 : String(value)}
@@ -287,8 +299,8 @@ export default function Api() {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-8 animate-mac-slide-up max-w-4xl">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-col gap-8 animate-mac-slide-up max-w-4xl min-w-0">
+              <div className="flex items-start sm:items-center gap-3">
                 <span className="text-3xl">📚</span>
                 <h2 className="mac-h2">Content-Type Guide</h2>
               </div>
@@ -299,61 +311,65 @@ export default function Api() {
                     Common Content-Types
                   </h3>
                   <div className="mac-card overflow-hidden border-mac-border/10 p-0">
-                    <table className="w-full text-left mac-caption">
+                    <table className="w-full table-fixed text-left mac-caption">
                       <thead className="bg-mac-surface-opaque/50">
                         <tr>
-                          <th className="p-4 font-bold border-b border-mac-border/10 text-mac-blue">
+                          <th className="w-[44%] p-3 sm:p-4 font-bold border-b border-mac-border/10 text-mac-blue">
                             MIME Type
                           </th>
-                          <th className="p-4 font-bold border-b border-mac-border/10 text-mac-blue">
+                          <th className="p-3 sm:p-4 font-bold border-b border-mac-border/10 text-mac-blue">
                             Description
                           </th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-mac-border/5">
                         <tr>
-                          <td className="p-4 font-mono opacity-80">
+                          <td className="p-3 sm:p-4 font-mono opacity-80 break-words">
                             application/json
                           </td>
-                          <td className="p-4">
+                          <td className="p-3 sm:p-4 break-words">
                             Standard format for modern API data.
                           </td>
                         </tr>
                         <tr>
-                          <td className="p-4 font-mono opacity-80">
+                          <td className="p-3 sm:p-4 font-mono opacity-80 break-words">
                             image/jpeg, png, gif
                           </td>
-                          <td className="p-4">
+                          <td className="p-3 sm:p-4 break-words">
                             Visual media formats (Photos, Graphics).
                           </td>
                         </tr>
                         <tr>
-                          <td className="p-4 font-mono opacity-80">
+                          <td className="p-3 sm:p-4 font-mono opacity-80 break-words">
                             audio/mpeg, wav
                           </td>
-                          <td className="p-4">Sound and music files.</td>
+                          <td className="p-3 sm:p-4 break-words">
+                            Sound and music files.
+                          </td>
                         </tr>
                         <tr>
-                          <td className="p-4 font-mono opacity-80">
+                          <td className="p-3 sm:p-4 font-mono opacity-80 break-words">
                             video/mp4, webm
                           </td>
-                          <td className="p-4">
+                          <td className="p-3 sm:p-4 break-words">
                             Motion picture and video content.
                           </td>
                         </tr>
                         <tr>
-                          <td className="p-4 font-mono opacity-80">
+                          <td className="p-3 sm:p-4 font-mono opacity-80 break-words">
                             text/html
                           </td>
-                          <td className="p-4">
+                          <td className="p-3 sm:p-4 break-words">
                             Web page structure (HTML documents).
                           </td>
                         </tr>
                         <tr>
-                          <td className="p-4 font-mono opacity-80">
+                          <td className="p-3 sm:p-4 font-mono opacity-80 break-words">
                             text/plain
                           </td>
-                          <td className="p-4">Raw unformatted text strings.</td>
+                          <td className="p-3 sm:p-4 break-words">
+                            Raw unformatted text strings.
+                          </td>
                         </tr>
                       </tbody>
                     </table>

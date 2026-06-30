@@ -1,0 +1,16 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bat rotated diagonally -->
+  <g transform="rotate(45 12 12)">
+    <!-- Grip -->
+    <rect x="11.25" y="15" width="1.5" height="7" rx="0.5" fill="#8c6239" />
+    <circle cx="12" cy="22" r="1" fill="#5c3a21" />
+    <!-- Barrel -->
+    <path d="M10.25,2 L13.75,2 L13,15 L11,15 Z" fill="#d4a373" />
+    <path d="M10.25,2 C10.25,1.5 13.75,1.5 13.75,2 Z" fill="#bb8a5d" />
+  </g>
+  <!-- Baseball -->
+  <circle cx="7" cy="9" r="4.5" fill="#ffffff" stroke="#8c6239" stroke-width="1" />
+  <!-- Stitches -->
+  <path d="M 4.5,7 Q 6.5,9 4.5,11" fill="none" stroke="#d90429" stroke-width="0.8" stroke-dasharray="0.8 0.6" />
+  <path d="M 9.5,7 Q 7.5,9 9.5,11" fill="none" stroke="#d90429" stroke-width="0.8" stroke-dasharray="0.8 0.6" />
+</svg>

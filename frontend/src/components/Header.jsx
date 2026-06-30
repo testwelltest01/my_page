@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import cat from "../assets/cat.svg";
 
 function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem("theme");
     if (saved) return saved === "dark";
@@ -23,6 +24,18 @@ function Header() {
     <header className="sticky top-4 z-50 mac-window m-4 overflow-visible backdrop-blur-md bg-mac-surface-opaque/70 border-b border-[var(--mac-border)] shadow-lg">
       <div className="mac-title-bar justify-between bg-mac-surface-opaque/50">
         <div className="flex items-center gap-6">
+          <button
+            type="button"
+            className="mac-mobile-menu-button"
+            aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
+            onClick={() => setIsMenuOpen((open) => !open)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
           <div className="mac-traffic-lights">
             <div className="mac-dot mac-dot-close" />
             <div className="mac-dot mac-dot-min" />
@@ -34,7 +47,7 @@ function Header() {
           </div>
         </div>
 
-        <nav>
+        <nav className="mac-desktop-nav">
           <ul className="flex gap-1">
             <li>
               <Link to="/" className="mac-nav-item">
@@ -42,9 +55,34 @@ function Header() {
               </Link>
             </li>
             <li>
-              <Link to="/FirstProject" className="mac-nav-item">
+              <a
+                href="/portfolio/최현석 포트폴리오.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mac-nav-item mac-nav-project-red"
+              >
                 First Project
-              </Link>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/portfolio3/Portfolio.dc.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mac-nav-item mac-nav-project-yellow"
+              >
+                Second Project
+              </a>
+            </li>
+            <li>
+              <a
+                href="/portfolio2/진실의 입 Portfolio.dc.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mac-nav-item mac-nav-project-green"
+              >
+                Third Project
+              </a>
             </li>
             <li>
               <Link to="/Api" className="mac-nav-item">
@@ -69,7 +107,7 @@ function Header() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-4">
+        <div className="mac-desktop-actions">
           <button
             onClick={() => setIsDark(!isDark)}
             className="mac-button-secondary w-10 h-8 p-0 flex items-center justify-center text-lg"
@@ -82,6 +120,108 @@ function Header() {
             className="mac-search w-32 focus:w-48 transition-all"
             placeholder="Search"
           />
+          <div className="mac-badge bg-mac-green/10 text-mac-green border-mac-green/20">
+            Online
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="mobile-navigation"
+        className={`mac-mobile-menu ${isMenuOpen ? "is-open" : ""}`}
+      >
+        <nav aria-label="모바일 메뉴">
+          <ul className="mac-mobile-menu-list">
+            <li>
+              <Link
+                to="/"
+                className="mac-nav-item"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Main
+              </Link>
+            </li>
+            <li>
+              <a
+                href="/portfolio/최현석 포트폴리오.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mac-nav-item mac-nav-project-red"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                First Project
+              </a>
+            </li>
+            <li>
+              <a
+                href="/portfolio3/Portfolio.dc.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mac-nav-item mac-nav-project-yellow"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Second Project
+              </a>
+            </li>
+            <li>
+              <a
+                href="/portfolio2/진실의 입 Portfolio.dc.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mac-nav-item mac-nav-project-green"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Third Project
+              </a>
+            </li>
+            <li>
+              <Link
+                to="/Api"
+                className="mac-nav-item"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Api
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/Cat"
+                className="mac-nav-item"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Cat
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/RandomAnimal"
+                className="mac-nav-item"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                RandomAnimal
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/DesignSystemDemo"
+                className="mac-nav-item"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Design System
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        <div className="mac-mobile-actions">
+          <button
+            onClick={() => setIsDark(!isDark)}
+            className="mac-button-secondary w-10 h-8 p-0 flex items-center justify-center text-lg"
+            title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          >
+            {isDark ? "☀️" : "🌙"}
+          </button>
+          <input type="text" className="mac-search" placeholder="Search" />
           <div className="mac-badge bg-mac-green/10 text-mac-green border-mac-green/20">
             Online
           </div>

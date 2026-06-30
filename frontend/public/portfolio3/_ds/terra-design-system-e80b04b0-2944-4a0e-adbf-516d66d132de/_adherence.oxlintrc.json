@@ -38,8 +38,8 @@
         "message": "Raw px value — use a design-system spacing token via var()."
       },
       {
-        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:Literata|Nunito Sans))/i]",
-        "message": "Font not provided by the design system. Available: Literata, Nunito Sans."
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:Noto Serif KR|Pretendard))/i]",
+        "message": "Font not provided by the design system. Available: Noto Serif KR, Pretendard."
       },
       {
         "selector": "JSXOpeningElement[name.name='Alert'] > JSXAttribute > JSXIdentifier[name!=/^(?:tone|title|icon|onClose|children|key|ref|className|style|children)$/]",
@@ -426,8 +426,8 @@
       "--border-soft": "color"
     },
     "fontFamilies": [
-      "Literata",
-      "Nunito Sans"
+      "Noto Serif KR",
+      "Pretendard"
     ]
   }
 }
