@@ -1,0 +1,90 @@
+/* Terra — Color tokens
+   Earthy, desaturated, warm. Every neutral carries a yellow/green undertone.
+   No neon, no pure hues, no clinical white. */
+
+:root {
+  /* ---- Forest green (primary scale) ---- */
+  --green-900: #243528;
+  --green-800: #2e4034;
+  --green-700: #3a6248;
+  --green-600: #4a7c59; /* PRIMARY */
+  --green-500: #5e9170;
+  --green-400: #82ac90;
+  --green-300: #a6c6b1;
+  --green-200: #cadfd2;
+  --green-100: #e2efe6;
+  --green-50:  #eff5f1;
+
+  /* ---- Warm amber / clay (tertiary scale) ---- */
+  --amber-900: #463a1f;
+  --amber-800: #5a4a28;
+  --amber-700: #705c30; /* TERTIARY */
+  --amber-600: #8a7340;
+  --amber-500: #a78d56;
+  --amber-400: #c2a877;
+  --amber-300: #d8c69d;
+  --amber-200: #e8dcc1;
+  --amber-100: #f2ebd9;
+
+  /* ---- Terracotta (semantic warmth / error) ---- */
+  --clay-700: #8a4231;
+  --clay-600: #a85841;
+  --clay-500: #c07058;
+  --clay-100: #f1ddd4;
+
+  /* ---- Warm neutrals (cream-rooted, green/yellow undertone) ---- */
+  --cream:       #faf6f0; /* BACKGROUND */
+  --cream-raised:#fffdf9;
+  --cream-sunk:  #f4ede2;
+  --neutral-900: #2e3230;
+  --neutral-800: #3d423d;
+  --neutral-700: #4f534b;
+  --neutral-600: #6a6d62;
+  --neutral-500: #86887b;
+  --neutral-400: #a6a698;
+  --neutral-300: #c8c4b6;
+  --neutral-200: #e0dacd;
+  --neutral-100: #ece6d9;
+
+  /* ============ Semantic aliases ============ */
+  /* Surfaces */
+  --surface-bg:       var(--cream);
+  --surface-card:     var(--cream-raised);
+  --surface-sunk:     var(--cream-sunk);
+  --surface-inverse:  var(--green-900);
+
+  /* Text */
+  --text-strong:   var(--neutral-900);
+  --text-body:     var(--neutral-800);
+  --text-muted:    var(--neutral-600);
+  --text-subtle:   var(--neutral-500);
+  --text-on-color: var(--cream);
+  --text-link:     var(--green-700);
+
+  /* Brand / interactive */
+  --color-primary:        var(--green-600);
+  --color-primary-hover:  var(--green-700);
+  --color-primary-press:  var(--green-800);
+  --color-primary-soft:   var(--green-100);
+  --color-on-primary:     #ffffff;
+
+  --color-accent:         var(--amber-700);
+  --color-accent-soft:    var(--amber-100);
+  --color-on-accent:      #ffffff;
+
+  /* Borders / outlines */
+  --outline:          var(--neutral-200);
+  --outline-variant:  var(--neutral-300);
+  --outline-strong:   var(--neutral-400);
+  --focus-ring:       color-mix(in srgb, var(--green-600) 38%, transparent);
+
+  /* Semantic states */
+  --color-success:      var(--green-600);
+  --color-success-soft: var(--green-100);
+  --color-warning:      var(--amber-600);
+  --color-warning-soft: var(--amber-100);
+  --color-danger:       var(--clay-600);
+  --color-danger-soft:  var(--clay-100);
+  --color-info:         #5a7d76;
+  --color-info-soft:    #dce8e4;
+}

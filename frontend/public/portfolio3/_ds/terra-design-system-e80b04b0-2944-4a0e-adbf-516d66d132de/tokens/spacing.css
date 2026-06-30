@@ -1,0 +1,29 @@
+/* Terra — Spacing & layout tokens
+   Breathable, generous. 4px base, but components lean roomy. */
+
+:root {
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;   /* default card padding */
+  --space-7:  32px;
+  --space-8:  40px;
+  --space-9:  48px;
+  --space-10: 64px;
+  --space-11: 80px;
+  --space-12: 96px;
+
+  /* Component rhythm */
+  --pad-card:    24px;
+  --pad-control: 12px 18px;
+  --gap-tight:   8px;
+  --gap-default: 16px;
+  --gap-loose:   24px;
+
+  /* Layout */
+  --container-max: 1200px;
+  --container-prose: 680px;
+}
