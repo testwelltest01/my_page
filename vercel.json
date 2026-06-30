@@ -10,8 +10,36 @@
       "destination": "/api/index.py"
     },
     {
+      "source": "/assets/(.*)",
+      "destination": "/frontend/assets/$1"
+    },
+    {
+      "source": "/portfolio/(.*)",
+      "destination": "/frontend/portfolio/$1"
+    },
+    {
+      "source": "/portfolio2/(.*)",
+      "destination": "/frontend/portfolio2/$1"
+    },
+    {
+      "source": "/portfolio3/(.*)",
+      "destination": "/frontend/portfolio3/$1"
+    },
+    {
+      "source": "/cat.svg",
+      "destination": "/frontend/cat.svg"
+    },
+    {
+      "source": "/favicon.png",
+      "destination": "/frontend/favicon.png"
+    },
+    {
+      "source": "/project_vision.png",
+      "destination": "/frontend/project_vision.png"
+    },
+    {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/frontend/index.html"
     }
   ],
   "builds": [

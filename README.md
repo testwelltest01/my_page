@@ -59,6 +59,7 @@ uvicorn index:app --reload
 1.  **Vercel 연동**: Vercel 대시보드에서 이 GitHub 리포지토리를 Import 합니다.
 2.  **환경 변수 설정**: Vercel 프로젝트 설정의 **Environment Variables** 탭에서 `GOOGLE_API_KEY`를 추가해 주세요.
 3.  **배포**: 별도의 빌드 명령 수정 없이 바로 배포가 진행됩니다. 배포 완료 시 `/api/*` 경로는 백엔드로, 그 외 경로는 프론트엔드로 연결됩니다.
+    - Vercel의 정적 빌드 산출물이 `/frontend` 경로 아래에 놓이므로, `vercel.json`에서 `/`, `/assets/*`, `/portfolio*` 공개 경로를 `/frontend/*` 실제 파일 경로로 rewrite합니다.
 
 ---
 
